@@ -1,0 +1,43 @@
+
+plugins {
+    id 'maven-publish'
+}
+
+apply plugin: 'java'
+apply plugin: 'java-library'
+
+sourceCompatibility = "11"
+targetCompatibility = "11"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    // SLF4J
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-simple:2.0.0-alpha7'
+
+    // validation-api
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.lostsidewalk.newsgears'
+            artifactId = 'newsgears-model'
+            version = '0.1-dev1'
+
+            from components.java
+        }
+    }
+}
