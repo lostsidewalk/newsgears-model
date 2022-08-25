@@ -1,6 +1,8 @@
 package com.lostsidewalk.buffy;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,7 +32,8 @@ public class StagingPost implements Serializable {
     private final String postTitle;
 
     @NotBlank
-    private final String postDesc;
+    @Setter(AccessLevel.PACKAGE)
+    private String postDesc;
 
     @NotBlank
     private final String postUrl;
@@ -44,6 +47,7 @@ public class StagingPost implements Serializable {
     @NotBlank
     private final String postHash;
 
+    @Setter(AccessLevel.PUBLIC)
     private PostStatus postStatus;
 
     StagingPost(String importerId, String tagName, String importerDesc, String postTitle, String postDesc, String postUrl, String postImgUrl, Serializable sourceObj, Date importTimestamp, String postHash) {
