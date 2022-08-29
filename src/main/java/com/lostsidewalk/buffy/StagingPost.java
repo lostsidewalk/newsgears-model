@@ -21,7 +21,7 @@ public class StagingPost implements Serializable {
     @NotBlank
     private final String importerId;
 
-    private final String tagName;
+    private final String feedIdent;
 
     private final String importerDesc;
 
@@ -50,9 +50,9 @@ public class StagingPost implements Serializable {
     @Setter(AccessLevel.PUBLIC)
     private PostStatus postStatus;
 
-    StagingPost(String importerId, String tagName, String importerDesc, String postTitle, String postDesc, String postUrl, String postImgUrl, Serializable sourceObj, Date importTimestamp, String postHash) {
+    StagingPost(String importerId, String feedIdent, String importerDesc, String postTitle, String postDesc, String postUrl, String postImgUrl, Serializable sourceObj, Date importTimestamp, String postHash) {
         this.importerId = importerId;
-        this.tagName = tagName;
+        this.feedIdent = feedIdent;
         this.importerDesc = importerDesc;
         this.postTitle = postTitle;
         this.postDesc = postDesc;
