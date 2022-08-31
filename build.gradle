@@ -17,11 +17,16 @@ repositories {
 
 dependencies {
     // SLF4J
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'org.slf4j:slf4j-simple:2.0.0-alpha7'
+    implementation 'org.slf4j:slf4j-api:2.0.0'
+    implementation 'org.slf4j:slf4j-simple:2.0.0'
 
     // validation-api
     implementation 'javax.validation:validation-api:2.0.1.Final'
+
+    // jackson-annotation
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+    // jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
