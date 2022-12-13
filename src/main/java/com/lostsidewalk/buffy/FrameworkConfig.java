@@ -1,49 +1,47 @@
 package com.lostsidewalk.buffy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@SuppressWarnings("unused")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FrameworkConfig {
 
     public static final String USERNAME = "username";
 
-    private String username;
+    private Long userId;
 
-    public String getUsername() {
-        return username;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     //
     //
     //
 
-    public static final String FEED_CONFIG = "feed";
+    public static final String NOTIFICATION_CONFIG = "notifications";
 
-    private Map<String, String> feed = new HashMap<>();
+    private Map<String, String> notifications = new HashMap<>();
 
-    public Map<String, String> getFeed() {
-        return feed;
+    public Map<String, String> getNotifications() {
+        return notifications;
     }
 
-    public void setFeed(Map<String, String> feed) {
-        this.feed = feed;
+    public void setNotifications(Map<String, String> notifications) {
+        this.notifications = notifications;
     }
 
     @Override
     public String toString() {
         return "Framework Configuration {" +
-                " feed=" + feed +
+                " notifications=" + notifications +
                 "}";
     }
 
@@ -54,15 +52,15 @@ public class FrameworkConfig {
         }
 
         FrameworkConfig otherFrameworkConfig = (FrameworkConfig) other;
-        boolean isUsernameEq = Optional.ofNullable(this.username).map(u -> u.equals(otherFrameworkConfig.getUsername())).orElse(false);
+        boolean isUsernameEq = Optional.ofNullable(this.userId)
+                .map(u -> u.equals(otherFrameworkConfig.getUserId()))
+                .orElse(false);
         if (!isUsernameEq) {
             return false;
         }
-        boolean isFeedEq = Optional.ofNullable(this.feed).map(m -> m.equals(otherFrameworkConfig.getFeed())).orElse(false);
-        if (!isFeedEq) {
-            return false;
-        }
 
-        return true;
+        return Optional.ofNullable(this.notifications)
+                .map(m -> m.equals(otherFrameworkConfig.getNotifications()))
+                .orElse(false);
     }
 }

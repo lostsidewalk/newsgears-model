@@ -6,8 +6,11 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'java-library'
 
-sourceCompatibility = "11"
-targetCompatibility = "11"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(19)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -17,20 +20,25 @@ repositories {
 
 dependencies {
     // SLF4J
-    implementation 'org.slf4j:slf4j-api:2.0.0'
-    implementation 'org.slf4j:slf4j-simple:2.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.5'
 
     // validation-api
     implementation 'javax.validation:validation-api:2.0.1.Final'
 
     // jackson-annotation
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.0'
     // jackson-databind
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+    // commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    // commons-codec
+    implementation 'commons-codec:commons-codec:1.15'
+    // jaxb-api
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
@@ -40,7 +48,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.lostsidewalk.newsgears'
             artifactId = 'newsgears-model'
-            version = '0.1-dev1'
+            version = '0.2'
 
             from components.java
         }
