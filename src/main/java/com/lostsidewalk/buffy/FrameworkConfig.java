@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 @SuppressWarnings("unused")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -47,19 +48,18 @@ public class FrameworkConfig {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof FrameworkConfig)) {
+        if (!(other instanceof FrameworkConfig otherFrameworkConfig)) {
             return false;
         }
 
-        FrameworkConfig otherFrameworkConfig = (FrameworkConfig) other;
-        boolean isUsernameEq = Optional.ofNullable(this.userId)
+        boolean isUsernameEq = ofNullable(this.userId)
                 .map(u -> u.equals(otherFrameworkConfig.getUserId()))
                 .orElse(false);
         if (!isUsernameEq) {
             return false;
         }
 
-        return Optional.ofNullable(this.notifications)
+        return ofNullable(this.notifications)
                 .map(m -> m.equals(otherFrameworkConfig.getNotifications()))
                 .orElse(false);
     }
