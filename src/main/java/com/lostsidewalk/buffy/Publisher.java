@@ -28,21 +28,17 @@ public interface Publisher {
     class PubResult {
 
         String publisherIdent;
-        String feedIdent;
-        String transportIdent;
         List<Throwable> errors;
         Date pubDate;
 
-        private PubResult(String publisherIdent, String feedIdent, String transportIdent, List<Throwable> errors, Date pubDate) {
+        private PubResult(String publisherIdent, List<Throwable> errors, Date pubDate) {
             this.publisherIdent = publisherIdent;
-            this.feedIdent = feedIdent;
-            this.transportIdent = transportIdent;
             this.errors = errors;
             this.pubDate = pubDate;
         }
 
-        public static PubResult from(String publisherIdent, String feedIdent, String transportIdent, List<Throwable> errors, Date pubDate) {
-            return new PubResult(publisherIdent, feedIdent, transportIdent, errors, pubDate);
+        public static PubResult from(String publisherIdent, List<Throwable> errors, Date pubDate) {
+            return new PubResult(publisherIdent, errors, pubDate);
         }
     }
 

@@ -1,39 +1,56 @@
 package com.lostsidewalk.buffy.feed;
 
 import lombok.Data;
+import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import static com.lostsidewalk.buffy.feed.FeedDefinition.FeedStatus.ENABLED;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
+import static lombok.AccessLevel.PUBLIC;
 import static org.apache.commons.lang3.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Data
 public class FeedDefinition {
 
+    @SuppressWarnings("unused")
+    public enum FeedStatus {
+        ENABLED, DISABLED
+    }
+
     private Long id;
 
+    @NotBlank
     private String ident;
 
+    @NotBlank
     private String title;
 
     private String description;
 
     private String generator;
 
+    @NotBlank
     private String transportIdent;
 
+    @NotBlank
     private String username;
 
-    private boolean isActive;
+    @Setter(PUBLIC)
+    @NotNull
+    private FeedStatus feedStatus;
 
     private Serializable exportConfig;
 
     private String copyright;
 
+    @NotBlank
     private String language;
 
     private String feedImgSrc;
@@ -43,7 +60,7 @@ public class FeedDefinition {
     private Date lastDeployed;
 
     FeedDefinition(String ident, String title, String description, String generator, String transportIdent,
-                   String username, boolean isActive, Serializable exportConfig, String copyright,
+                   String username, FeedStatus feedStatus, Serializable exportConfig, String copyright,
                    String language, String feedImgSrc, String feedImgTransportIdent, Date lastDeployed)
     {
         this.ident = ident;
@@ -52,7 +69,7 @@ public class FeedDefinition {
         this.generator = generator;
         this.transportIdent = transportIdent;
         this.username = username;
-        this.isActive = isActive;
+        this.feedStatus = feedStatus;
         this.exportConfig = exportConfig;
         this.copyright = copyright;
         this.language = language;
@@ -69,7 +86,7 @@ public class FeedDefinition {
             String generator,
             String transportIdent,
             String username,
-            boolean isActive,
+            FeedStatus feedStatus,
             Serializable exportConfig,
             String copyright,
             String language,
@@ -84,7 +101,7 @@ public class FeedDefinition {
                 generator,
                 transportIdent,
                 username,
-                isActive,
+                feedStatus,
                 exportConfig,
                 copyright,
                 language,
@@ -101,7 +118,6 @@ public class FeedDefinition {
             String generator,
             String transportIdent,
             String username,
-            boolean isActive,
             Serializable exportConfig,
             String copyright,
             String language,
@@ -115,7 +131,7 @@ public class FeedDefinition {
                 generator,
                 transportIdent,
                 username,
-                isActive,
+                ENABLED,
                 exportConfig,
                 copyright,
                 language,

@@ -2,6 +2,8 @@ package com.lostsidewalk.buffy.query;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -9,26 +11,33 @@ public class QueryDefinition {
 
     Long id;
 
-    String feedIdent;
+    @NotNull
+    Long feedId;
 
+    @NotBlank
     String username;
 
+    String queryTitle;
+
+    @NotBlank
     String queryText;
 
+    @NotBlank
     String queryType;
 
     private Serializable queryConfig;
 
-    private QueryDefinition(String feedIdent, String username, String queryText, String queryType, Serializable queryConfig) {
-        this.feedIdent = feedIdent;
+    private QueryDefinition(Long feedId, String username, String queryTitle, String queryText, String queryType, Serializable queryConfig) {
+        this.feedId = feedId;
         this.username = username;
+        this.queryTitle = queryTitle;
         this.queryText = queryText;
         this.queryType = queryType;
         this.queryConfig = queryConfig;
     }
 
     @SuppressWarnings("unused")
-    public static QueryDefinition from(String feedIdent, String username, String queryText, String queryType, Serializable queryConfig) {
-        return new QueryDefinition(feedIdent, username, queryText, queryType, queryConfig);
+    public static QueryDefinition from(Long feedId, String username, String queryTitle, String queryText, String queryType, Serializable queryConfig) {
+        return new QueryDefinition(feedId, username, queryTitle, queryText, queryType, queryConfig);
     }
 }

@@ -1,9 +1,8 @@
 package com.lostsidewalk.buffy.post;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,18 +10,47 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.List;
 
+import static java.lang.Math.min;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
+import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PUBLIC;
 import static org.apache.commons.lang3.SerializationUtils.serialize;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
+@Slf4j
 @Data
 public class StagingPost implements Serializable {
 
+    private static final String IMPORTER_DESC_FIELD_NAME = "importerDesc";
+
+    private static final String SOURCE_NAME_FIELD_NAME = "sourceName";
+
+    private static final String SOURCE_URL_FIELD_NAME = "sourceUrl";
+
+    private static final String POST_TITLE_FIELD_NAME = "postTitle";
+
+    private static final String POST_DESC_FIELD_NAME = "postDesc";
+
+    private static final String POST_URL_FIELD_NAME = "postUrl";
+
+    private static final String POST_IMG_URL_FIELD_NAME = "postImgUrl";
+
+    private static final String POST_COMMENT_FIELD_NAME = "postComment";
+
+    private static final String POST_RIGHTS_FIELD_NAME = "postRights";
+
+    private static final String ENCLOSURE_URL_FIELD_NAME = "enclosureUrl";
+
     @SuppressWarnings("unused")
-    public enum PostStatus {
-        PUB_PENDING, DEPUB_PENDING, IGNORED, PURGE_PENDING
+    public enum PostPubStatus {
+        PUB_PENDING, DEPUB_PENDING, PURGE_PENDING
+    }
+
+    @SuppressWarnings("unused")
+    public enum PostReadStatus {
+        UNREAD, READ, READ_LATER
     }
 
     private Long id;
@@ -30,7 +58,8 @@ public class StagingPost implements Serializable {
     @NotBlank
     private final String importerId;
 
-    private final String feedIdent;
+    @NotNull
+    private final Long feedId;
 
     private final String importerDesc;
 
@@ -41,19 +70,30 @@ public class StagingPost implements Serializable {
 
     private final String sourceUrl;
 
-    @NotBlank
-    private final String postTitle;
+    @NotNull
+    private final ContentObject postTitle;
 
-    @NotBlank
-    @Setter(AccessLevel.PACKAGE)
-    private String postDesc;
+    @NotNull
+    @Setter(PACKAGE)
+    private ContentObject postDesc;
+
+    private List<ContentObject> postContents;
+
+    private PostMedia postMedia;
+
+    private PostITunes postITunes;
 
     @NotBlank
     private final String postUrl;
 
+    private final List<PostUrl> postUrls;
+
     private final String postImgUrl;
 
     private final String postImgTransportIdent;
+
+    @NotNull
+    private final Date importTimestamp;
 
     @NotBlank
     private final String postHash;
@@ -61,215 +101,227 @@ public class StagingPost implements Serializable {
     @NotBlank
     private final String username;
 
-    private String postComment;
+    private final String postComment;
 
-    @Setter(PUBLIC) //  newsgears-data/StagingPostDao
-    private PostStatus postStatus;
+    private final String postRights;
 
-    private String postRights;
+    private final List<PostPerson> contributors;
 
-    private String xmlBase;
+    private final List<PostPerson> authors;
 
-    private String contributorName;
+    private final List<String> postCategories;
 
-    private String contributorEmail;
+    private final Date publishTimestamp;
 
-    private String authorName;
+    private final Date expirationTimestamp;
 
-    private String authorEmail;
+    private final List<PostEnclosure> enclosures;
 
-    private String postCategory;
+    private final Date lastUpdatedTimestamp;
+    //
+    // Note: the following fields are not in any c'tor
+    //
+    @Setter(PUBLIC) // newsgears-data/StagingPostDao
+    private boolean isPublished;
 
-    private String enclosureUrl;
+    @Setter(PUBLIC) // newsgears-data/StagingPostDao
+    private PostPubStatus postPubStatus;
 
-    @NotNull
-    private final Date importTimestamp;
-
-    private Date publishTimestamp;
-
-    private Date expirationTimestamp;
-
-    private Date lastUpdatedTimestamp;
-
-    @Getter
-    boolean isPublished;
+    @Setter(PUBLIC) // newsgears-data/StagingPostDao
+    private PostReadStatus postReadStatus;
 
     StagingPost(String importerId,
-                String feedIdent,
+                Long feedId,
                 String importerDesc,
                 Serializable sourceObj,
                 String sourceName,
                 String sourceUrl,
-                String postTitle,
-                String postDesc,
+                ContentObject postTitle,
+                ContentObject postDesc,
+                List<ContentObject> postContents,
+                PostMedia postMedia,
+                PostITunes postItunes,
                 String postUrl,
+                List<PostUrl> postUrls,
                 String postImgUrl,
                 String postImgTransportIdent,
                 Date importTimestamp,
                 String postHash,
                 String username,
                 String postComment,
-                boolean isPublished,
                 String postRights,
-                String xmlBase,
-                String contributorName,
-                String contributorEmail,
-                String authorName,
-                String authorEmail,
-                String postCategory,
+                List<PostPerson> contributors,
+                List<PostPerson> authors,
+                List<String> postCategories,
                 Date publishTimestamp,
                 Date expirationTimestamp,
-                String enclosureUrl,
+                List<PostEnclosure> enclosures,
                 Date lastUpdatedTimestamp
-                ) {
+    ) {
         this.importerId = importerId;
-        this.feedIdent = feedIdent;
-        this.importerDesc = importerDesc;
-        this.sourceObj = sourceObj;
-        this.sourceName = sourceName;
-        this.sourceUrl = sourceUrl;
+        this.feedId = feedId;
+        this.importerDesc = trimToLength(IMPORTER_DESC_FIELD_NAME, importerDesc, 512); // 512
+        this.sourceObj = sourceObj; // json
+        this.sourceName = trimToLength(SOURCE_NAME_FIELD_NAME, sourceName, 256); // 256
+        this.sourceUrl = trimToLength(SOURCE_URL_FIELD_NAME, sourceUrl, 1024); // 1024
         this.postTitle = postTitle;
         this.postDesc = postDesc;
-        this.postUrl = postUrl;
-        this.postImgUrl = postImgUrl;
-        this.postImgTransportIdent = postImgTransportIdent;
-        this.importTimestamp = importTimestamp;
-        this.postHash = postHash;
-        this.username = username;
-        this.postComment = postComment;
-        this.isPublished = isPublished;
-        this.postRights = postRights;
-        this.xmlBase = xmlBase;
-        this.contributorName = contributorName;
-        this.contributorEmail = contributorEmail;
-        this.authorName = authorName;
-        this.authorEmail = authorEmail;
-        this.postCategory = postCategory;
-        this.publishTimestamp = publishTimestamp;
-        this.expirationTimestamp = expirationTimestamp;
-        this.enclosureUrl = enclosureUrl;
-        this.lastUpdatedTimestamp = lastUpdatedTimestamp;
+        this.postContents = postContents;
+        this.postMedia = postMedia;
+        this.postITunes = postItunes;
+        this.postUrl = defaultString(trimToLength(POST_URL_FIELD_NAME, postUrl, 1024)); // 1024 required
+        this.postUrls = postUrls; // json
+        this.postImgUrl = trimToLength(POST_IMG_URL_FIELD_NAME, postImgUrl, 1024); // 1024
+        this.postImgTransportIdent = postImgTransportIdent; // 256
+        this.importTimestamp = importTimestamp; // required
+        this.postHash = postHash; // 64 required
+        this.username = username; // 100 required
+        this.postComment = trimToLength(POST_COMMENT_FIELD_NAME, postComment, 2048); // 2048
+        this.postRights = trimToLength(POST_RIGHTS_FIELD_NAME, postRights, 1024); // 1024
+        this.contributors = contributors; // json
+        this.authors = authors; // json
+        this.postCategories = postCategories; // json
+        this.publishTimestamp = publishTimestamp; // timestamp
+        this.expirationTimestamp = expirationTimestamp; // timestamp
+        this.enclosures = enclosures; // json
+        this.lastUpdatedTimestamp = lastUpdatedTimestamp; // timestamp
     }
 
+    private static String trimToLength(String fieldName, String str, int len) {
+        if (str == null) {
+            return null;
+        }
+        String t = trim(str);
+        if (t.length() > len) {
+            log.error("Field length overrun, fieldName={}, len={}", fieldName, len);
+        }
+        return t.substring(0, min(len, t.length()));
+    }
+    //
+    // has all args except Id
+    //
     @SuppressWarnings("unused")
     public static StagingPost from(
+            // Long id,
             String importerId,
-            String feedIdent,
+            Long feedId,
             String importerDesc,
             Serializable sourceObj,
             String sourceName,
             String sourceUrl,
-            String postTitle,
-            String postDesc,
+            ContentObject postTitle,
+            ContentObject postDesc,
+            List<ContentObject> postContents,
+            PostMedia postMedia,
+            PostITunes postITunes,
             String postUrl,
+            List<PostUrl> postUrls,
             String postImgUrl,
             String postImgTransportIdent,
             Date importTimestamp,
             String postHash,
             String username,
             String postComment,
-            boolean isPublished,
             String postRights,
-            String xmlBase,
-            String contributorName,
-            String contributorEmail,
-            String authorName,
-            String authorEmail,
-            String postCategory,
+            List<PostPerson> contributors,
+            List<PostPerson> authors,
+            List<String> postCategories,
             Date publishTimestamp,
             Date expirationTimestamp,
-            String enclosureUrl,
+            List<PostEnclosure> enclosures,
             Date lastUpdatedTimestamp)
     {
         return new StagingPost(
                 importerId,
-                feedIdent,
+                feedId,
                 importerDesc,
                 sourceObj,
                 sourceName,
                 sourceUrl,
                 postTitle,
                 postDesc,
+                postContents,
+                postMedia,
+                postITunes,
                 postUrl,
+                postUrls,
                 postImgUrl,
                 postImgTransportIdent,
                 importTimestamp,
                 postHash,
                 username,
                 postComment,
-                isPublished,
                 postRights,
-                xmlBase,
-                contributorName,
-                contributorEmail,
-                authorName,
-                authorEmail,
-                postCategory,
+                contributors,
+                authors,
+                postCategories,
                 publishTimestamp,
                 expirationTimestamp,
-                enclosureUrl,
+                enclosures,
                 lastUpdatedTimestamp
         );
     }
-
+    //
+    // missing Id, img transport ident
+    //
     @SuppressWarnings("unused")
     public static StagingPost from(
             String importerId,
-            String feedIdent,
+            Long feedId,
             String importerDesc,
             Serializable sourceObj,
             String sourceName,
             String sourceUrl,
-            String postTitle,
-            String postDesc,
+            ContentObject postTitle,
+            ContentObject postDesc,
+            List<ContentObject> postContents,
+            PostMedia postMedia,
+            PostITunes postITunes,
             String postUrl,
+            List<PostUrl> postUrls,
             String postImgUrl,
-            // no transport ident
+            // no img transport ident
             Date importTimestamp,
             String postHash,
             String username,
             String postComment,
-            boolean isPublished,
             String postRights,
-            String xmlBase,
-            String contributorName,
-            String contributorEmail,
-            String authorName,
-            String authorEmail,
-            String postCategory,
+            List<PostPerson> contributors,
+            List<PostPerson> authors,
+            List<String> postCategories,
             Date publishTimestamp,
             Date expirationTimestamp,
-            String enclosureUrl,
+            List<PostEnclosure> enclosures,
             Date lastUpdatedTimestamp
     ) {
         String postImgTransportIdent = getPostImgUrlHash(postImgUrl);
         return new StagingPost(
                 importerId,
-                feedIdent,
+                feedId,
                 importerDesc,
                 sourceObj,
                 sourceName,
                 sourceUrl,
                 postTitle,
                 postDesc,
+                postContents,
+                postMedia,
+                postITunes,
                 postUrl,
+                postUrls,
                 postImgUrl,
                 postImgTransportIdent, // added
                 importTimestamp,
                 postHash,
                 username,
                 postComment,
-                isPublished,
                 postRights,
-                xmlBase,
-                contributorName,
-                contributorEmail,
-                authorName,
-                authorEmail,
-                postCategory,
+                contributors,
+                authors,
+                postCategories,
                 publishTimestamp,
                 expirationTimestamp,
-                enclosureUrl,
+                enclosures,
                 lastUpdatedTimestamp
         );
     }
@@ -305,7 +357,7 @@ public class StagingPost implements Serializable {
             null,
             null,
             null,
-            false,
+            null,
             null,
             null,
             null,
