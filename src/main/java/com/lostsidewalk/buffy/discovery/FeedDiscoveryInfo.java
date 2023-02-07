@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import static com.lostsidewalk.buffy.discovery.FeedDiscoveryInfo.FeedDiscoveryExceptionType.*;
 import static java.lang.Math.min;
+import static java.net.InetAddress.getByName;
 import static java.net.URI.create;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -42,62 +43,43 @@ public class FeedDiscoveryInfo implements Serializable {
 
     Long id;
 
-    FeedDiscoveryExceptionType error;
-
     @NotBlank
     String feedUrl;
 
+    // HTTP results
     Integer httpStatusCode;
-
     String httpStatusMessage;
-
     String redirectFeedUrl;
-
     Integer redirectHttpStatusCode;
-
     String redirectHttpStatusMessage;
 
+    // content
     ContentObject title;
-
     ContentObject description;
-
     String feedType;
-
     String author;
-
     String copyright;
-
     String docs;
-
     String encoding;
-
     String generator;
-
     FeedDiscoveryImageInfo image;
-
     FeedDiscoveryImageInfo icon;
-
     String language;
-
     String link;
-
     String managingEditor;
-
     Date publishedDate;
-
     String styleSheet;
-
     List<String> supportedTypes;
-
     String webMaster;
-
     String uri;
-
     List<String> categories;
-
     List<FeedDiscoverySampleItem> sampleEntries;
-
     boolean isUrlUpgradable;
+
+    // errors
+    FeedDiscoveryExceptionType errorType;
+
+    String errorDetail;
 
     private FeedDiscoveryInfo(
             String feedUrl,
@@ -272,7 +254,7 @@ public class FeedDiscoveryInfo implements Serializable {
                                String redirectUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage,
                                Exception exception)
         {
-            super(exception);
+            super(exception.getMessage(), exception);
             this.feedUrl = feedUrl;
             this.httpStatusCode = httpStatusCode;
             this.httpStatusMessage = httpStatusMessage;
@@ -280,25 +262,25 @@ public class FeedDiscoveryInfo implements Serializable {
             this.redirectHttpStatusCode = redirectHttpStatusCode;
             this.redirectHttpStatusMessage = redirectHttpStatusMessage;
             if (exception instanceof FileNotFoundException) {
-                exceptionType = FILE_NOT_FOUND_EXCEPTION;
+                this.exceptionType = FILE_NOT_FOUND_EXCEPTION;
             } else if (exception instanceof SSLHandshakeException) {
-                exceptionType = SSL_HANDSHAKE_EXCEPTION;
+                this.exceptionType = SSL_HANDSHAKE_EXCEPTION;
             } else if (exception instanceof UnknownHostException) {
-                exceptionType = UNKNOWN_HOST_EXCEPTION;
+                this.exceptionType = UNKNOWN_HOST_EXCEPTION;
             } else if (exception instanceof SocketTimeoutException) {
-                exceptionType = SOCKET_TIMEOUT_EXCEPTION;
+                this.exceptionType = SOCKET_TIMEOUT_EXCEPTION;
             }else if (exception instanceof ConnectException) {
-                exceptionType = CONNECT_EXCEPTION;
+                this.exceptionType = CONNECT_EXCEPTION;
             } else if (exception instanceof SocketException) {
-                exceptionType = SOCKET_EXCEPTION;
+                this.exceptionType = SOCKET_EXCEPTION;
             } else if (exception instanceof IllegalArgumentException) {
-                exceptionType = ILLEGAL_ARGUMENT_EXCEPTION;
+                this.exceptionType = ILLEGAL_ARGUMENT_EXCEPTION;
             } else if (exception instanceof ParsingFeedException) {
-                exceptionType = PARSING_FEED_EXCEPTION;
+                this.exceptionType = PARSING_FEED_EXCEPTION;
             } else if (exception instanceof IOException) {
-                exceptionType = IO_EXCEPTION;
+                this.exceptionType = IO_EXCEPTION;
             } else {
-                exceptionType = OTHER;
+                this.exceptionType = OTHER;
             }
         }
     }
@@ -364,6 +346,8 @@ public class FeedDiscoveryInfo implements Serializable {
             boolean hasAuthenticationHeaders = addAuthenticationHeader(feedConnection, username, password);
             // add the UA header
             addUserAgentHeader(feedConnection);
+            // add the cache control header
+            addCacheControlHeader(feedConnection);
             // get the (initial) status response
             statusCode = getStatusCode(feedConnection);
             // get the (initial) status message
@@ -377,11 +361,13 @@ public class FeedDiscoveryInfo implements Serializable {
                     throw new FeedDiscoveryException(url, statusCode, statusMessage, redirectUrl, redirectStatusCode, null, OTHER); // (caught in an idiot loop of some sort)
                 }
                 // check for unsecure redirect
-                boolean isUnsecureRedirect = "http".equalsIgnoreCase(feedConnection.getURL().getProtocol());
-                // if this is an unsecure redirect and we have auth, bail
-                // if this is an unsecure redirect (no auth), but we have been instructed not to trust such redirects, bail
-                if (isUnsecureRedirect && (hasAuthenticationHeaders || !followUnsecureRedirects)) {
-                    throw new FeedDiscoveryException(url, statusCode, statusMessage, redirectUrl, null, null, UNSECURE_REDIRECT); // (http URL got redirected)
+                boolean isUnsecure = "http".equalsIgnoreCase(feedConnection.getURL().getProtocol());
+                // determine if we're being redirected within the same domain by comparing the resolved canonical name of the original URL to resolved canonical name of the redirect URL
+                boolean isSameDomain = getByName(feedConnection.getURL().getHost()).getCanonicalHostName().equals(getByName(new URL(redirectUrl).getHost()).getCanonicalHostName());
+                // if this is an unsecure redirect to a new domain *and we have auth*, bail
+                // also, if this is an unsecure redirect (no auth), but we have been instructed *not to trust such redirects to other domains*, bail
+                if ((isUnsecure && !isSameDomain) && (hasAuthenticationHeaders || !followUnsecureRedirects)) {
+                    throw new FeedDiscoveryException(url, statusCode, statusMessage, redirectUrl, null, null, UNSECURE_REDIRECT); // (http URL got redirected to other domain)
                 }
                 // open the redirect connection
                 feedConnection = openFeedConnection(redirectUrl);
@@ -417,12 +403,10 @@ public class FeedDiscoveryInfo implements Serializable {
             boolean isUrlUpgradable = false;
             try {
                 // non-redirected HTTP call which resulted in success
-                boolean isSuccess = isSuccess(statusCode);
-                boolean isHttp = "http".equalsIgnoreCase(feedConnection.getURL().getProtocol());
-                if (isSuccess && isHttp) {
+                if (isSuccess(statusCode) && "http".equalsIgnoreCase(feedConnection.getURL().getProtocol())) {
                     // attempt HTTPS
                     isUrlUpgradable = isUrlUpgradable(url, username, password, depth);
-                // redirected HTTP call which resulted in success
+                    // redirected HTTP call which resulted in success
                 } else {
                     boolean isRedirect = redirectStatusCode != null;
                     boolean isRedirectSuccess = isRedirect && isSuccess(redirectStatusCode);
@@ -436,50 +420,54 @@ public class FeedDiscoveryInfo implements Serializable {
                 // not upgradable
             }
 
-            byte[] allBytes = feedConnection.getInputStream().readAllBytes();
-            ByteArrayInputStream bais = new ByteArrayInputStream(allBytes);
-            XmlReader xmlReader = new XmlReader(bais);
-            SyndFeedInput input = new SyndFeedInput();
-            input.setAllowDoctypes(true);
-            SyndFeed feed = input.build(xmlReader);
-            FeedDiscoveryInfo i = FeedDiscoveryInfo.from(
-                    trimToLength(FEED_URL_FIELD_NAME, url, 1024),
-                    statusCode, // http status code
-                    trimToLength(STATUS_MESSAGE_FIELD_NAME, statusMessage, 512), // http status message
-                    trimToLength(REDIRECT_URL_FIELD_NAME, redirectUrl, 1024), // redirect url
-                    redirectStatusCode, // redirect status code
-                    trimToLength(REDIRECT_STATUS_MESSAGE_FIELD_NAME, redirectStatusMessage, 512), // redirect status message
-                    convertToContentObject(feed.getTitleEx()),
-                    convertToContentObject(feed.getDescriptionEx()),
-                    trimToLength(FEED_TYPE_FIELD_NAME, feed.getFeedType(), 64),
-                    trimToLength(AUTHOR_FIELD_NAME, feed.getAuthor(), 256),
-                    trimToLength(COPYRIGHT_FIELD_NAME, feed.getCopyright(), 1024),
-                    trimToLength(DOCS_FIELD_NAME, feed.getDocs(), 1024),
-                    trimToLength(ENCODING_FIELD_NAME, feed.getEncoding(), 64),
-                    trimToLength(GENERATOR_FIELD_NAME, feed.getGenerator(), 512),
-                    buildFeedImage(feed.getImage()),
-                    buildFeedImage(feed.getIcon()),
-                    trimToLength(LANGUAGE_FIELD_NAME, feed.getLanguage(), 16),
-                    trimToLength(LINK_FIELD_NAME, feed.getLink(), 1024),
-                    trimToLength(MANAGING_EDITOR_FIELD_NAME, feed.getManagingEditor(), 256),
-                    feed.getPublishedDate(),
-                    feed.getStyleSheet(),
-                    feed.getSupportedFeedTypes(),
-                    trimToLength(WEB_MASTER_FIELD_NAME, feed.getWebMaster(), 256),
-                    trimToLength(URI_FIELD_NAME, feed.getUri(), 1024),
-                    firstFiveCategories(feed.getCategories())
-                            .map(SyndCategory::getName)
-                            .map(n -> trimToLength(CATEGORIES_FIELD_NAME, n, 256))
-                            .collect(toList()),
-                    firstFiveEntries(feed.getEntries())
-                            .map(e -> FeedDiscoverySampleItem.from(e.getTitle(), e.getUri(), e.getLink(), e.getUpdatedDate()))
-                            .collect(toList()),
-                    // is upgradable
-                    isUrlUpgradable
-            );
-            i.collectForeignMarkup(feed);
+            try (InputStream is = feedConnection.getInputStream()) {
+                byte[] allBytes = is.readAllBytes();
+                ByteArrayInputStream bais = new ByteArrayInputStream(allBytes);
+                XmlReader xmlReader = new XmlReader(bais);
+                SyndFeedInput input = new SyndFeedInput();
+                input.setAllowDoctypes(true);
+                SyndFeed feed = input.build(xmlReader);
+                FeedDiscoveryInfo i = FeedDiscoveryInfo.from(
+                        trimToLength(FEED_URL_FIELD_NAME, url, 1024),
+                        statusCode, // http status code
+                        trimToLength(STATUS_MESSAGE_FIELD_NAME, statusMessage, 512), // http status message
+                        trimToLength(REDIRECT_URL_FIELD_NAME, redirectUrl, 1024), // redirect url
+                        redirectStatusCode, // redirect status code
+                        trimToLength(REDIRECT_STATUS_MESSAGE_FIELD_NAME, redirectStatusMessage, 512), // redirect status message
+                        convertToContentObject(feed.getTitleEx()),
+                        convertToContentObject(feed.getDescriptionEx()),
+                        trimToLength(FEED_TYPE_FIELD_NAME, feed.getFeedType(), 64),
+                        trimToLength(AUTHOR_FIELD_NAME, feed.getAuthor(), 256),
+                        trimToLength(COPYRIGHT_FIELD_NAME, feed.getCopyright(), 1024),
+                        trimToLength(DOCS_FIELD_NAME, feed.getDocs(), 1024),
+                        trimToLength(ENCODING_FIELD_NAME, feed.getEncoding(), 64),
+                        trimToLength(GENERATOR_FIELD_NAME, feed.getGenerator(), 512),
+                        buildFeedImage(feed.getImage()),
+                        buildFeedImage(feed.getIcon()),
+                        trimToLength(LANGUAGE_FIELD_NAME, feed.getLanguage(), 16),
+                        trimToLength(LINK_FIELD_NAME, feed.getLink(), 1024),
+                        trimToLength(MANAGING_EDITOR_FIELD_NAME, feed.getManagingEditor(), 256),
+                        feed.getPublishedDate(),
+                        feed.getStyleSheet(),
+                        feed.getSupportedFeedTypes(),
+                        trimToLength(WEB_MASTER_FIELD_NAME, feed.getWebMaster(), 256),
+                        trimToLength(URI_FIELD_NAME, feed.getUri(), 1024),
+                        firstFiveCategories(feed.getCategories())
+                                .map(SyndCategory::getName)
+                                .map(n -> trimToLength(CATEGORIES_FIELD_NAME, n, 256))
+                                .collect(toList()),
+                        firstFiveEntries(feed.getEntries())
+                                .map(e -> FeedDiscoverySampleItem.from(e.getTitle(), e.getUri(), e.getLink(), e.getUpdatedDate()))
+                                .collect(toList()),
+                        // is upgradable
+                        isUrlUpgradable
+                );
+                i.collectForeignMarkup(feed);
 
-            return i;
+                return i;
+            }
+        } catch (FeedDiscoveryException e) {
+            throw e;
         } catch (Exception e) {
             throw new FeedDiscoveryException(url, statusCode, statusMessage, redirectUrl, redirectStatusCode, redirectStatusMessage, e);
         }
@@ -503,6 +491,10 @@ public class FeedDiscoveryInfo implements Serializable {
 
     private static void addUserAgentHeader(HttpURLConnection feedConnection) {
         feedConnection.setRequestProperty("User-Agent", FEED_DISCOVERY_USER_AGENT);
+    }
+
+    private static void addCacheControlHeader(HttpURLConnection feedConnection) {
+        feedConnection.setRequestProperty("Cache-Control", "no-cache");
     }
 
     private static int getStatusCode(HttpURLConnection feedConnection) throws IOException {
@@ -649,7 +641,7 @@ public class FeedDiscoveryInfo implements Serializable {
                         // either initial discovery or redirected discovery produced an HTTP 200
                         (isSuccess(newFeedDiscoveryInfo.getHttpStatusCode()) || isSuccess(newFeedDiscoveryInfo.getRedirectHttpStatusCode()))
                         // and the feed parsed without an exception
-                        && newFeedDiscoveryInfo.getError() == null)
+                        && newFeedDiscoveryInfo.getErrorType() == null)
                 {
                     return true;
                 }

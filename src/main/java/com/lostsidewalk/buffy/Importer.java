@@ -2,7 +2,7 @@ package com.lostsidewalk.buffy;
 
 import com.lostsidewalk.buffy.post.StagingPost;
 import com.lostsidewalk.buffy.query.QueryDefinition;
-import lombok.AllArgsConstructor;
+import com.lostsidewalk.buffy.query.QueryMetrics;
 import lombok.Data;
 
 import java.util.List;
@@ -12,21 +12,29 @@ import java.util.Set;
 public interface Importer {
 
     @Data
-    @AllArgsConstructor
-    class ImporterMetrics {
-        final int successCt;
-        final int errorCt;
+    class ImportResult {
+
+        Set<StagingPost> importSet;
+
+        List<QueryMetrics> queryMetrics;
+
+        private ImportResult(Set<StagingPost> importSet, List<QueryMetrics> queryMetrics) {
+            this.importSet = importSet;
+            this.queryMetrics = queryMetrics;
+        }
+
+        public static ImportResult from(Set<StagingPost> importSet, List<QueryMetrics> queryMetrics) {
+            return new ImportResult(importSet, queryMetrics);
+        }
     }
 
-    void doImport(List<QueryDefinition> queryDefinitions);
+    ImportResult doImport(List<QueryDefinition> queryDefinitions);
 
     interface ImportResponseCallback {
-        void onSuccess(Set<StagingPost> stagingPosts);
+        ImportResult onSuccess(Set<StagingPost> stagingPosts);
 
-        void onFailure(Throwable throwable);
+        ImportResult onFailure(Throwable throwable);
     }
-
-    ImporterMetrics performImport(QueryDefinition queryDefinition, ImportResponseCallback importResponseCallback);
 
     String getImporterId();
 }

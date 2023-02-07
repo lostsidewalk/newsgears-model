@@ -14,6 +14,11 @@ public class ThumbnailedFeedDiscovery implements Serializable {
 
     Long id;
     String feedUrl;
+    Integer httpStatusCode;
+    String httpStatusMessage;
+    String redirectFeedUrl;
+    Integer redirectHttpStatusCode;
+    String redirectHttpStatusMessage;
     ContentObject title;
     ContentObject description;
     String feedType;
@@ -34,10 +39,16 @@ public class ThumbnailedFeedDiscovery implements Serializable {
     String uri;
     List<String> categories;
     List<FeedDiscoverySampleItem> sampleEntries;
+    boolean isUrlUpgradable;
 
     ThumbnailedFeedDiscovery(
             Long id,
             String feedUrl,
+            Integer httpStatusCode,
+            String httpStatusMessage,
+            String redirectFeedUrl,
+            Integer redirectHttpStatusCode,
+            String redirectHttpStatusMessage,
             ContentObject title,
             ContentObject description,
             String feedType,
@@ -57,9 +68,15 @@ public class ThumbnailedFeedDiscovery implements Serializable {
             String webMaster,
             String uri,
             List<String> categories,
-            List<FeedDiscoverySampleItem> sampleEntries) {
+            List<FeedDiscoverySampleItem> sampleEntries,
+            boolean isUrlUpgradable) {
         this.id = id;
         this.feedUrl = feedUrl;
+        this.httpStatusCode = httpStatusCode;
+        this.httpStatusMessage = httpStatusMessage;
+        this.redirectFeedUrl = redirectFeedUrl;
+        this.redirectHttpStatusCode = redirectHttpStatusCode;
+        this.redirectHttpStatusMessage = redirectHttpStatusMessage;
         this.title = title;
         this.description = description;
         this.feedType = feedType;
@@ -80,6 +97,7 @@ public class ThumbnailedFeedDiscovery implements Serializable {
         this.uri = uri;
         this.categories = categories;
         this.sampleEntries = sampleEntries;
+        this.isUrlUpgradable = isUrlUpgradable;
     }
 
     public static ThumbnailedFeedDiscovery from(FeedDiscoveryInfo feedDiscoveryInfo,
@@ -88,6 +106,11 @@ public class ThumbnailedFeedDiscovery implements Serializable {
         return new ThumbnailedFeedDiscovery(
                 feedDiscoveryInfo.getId(),
                 feedDiscoveryInfo.getFeedUrl(),
+                feedDiscoveryInfo.getHttpStatusCode(),
+                feedDiscoveryInfo.getHttpStatusMessage(),
+                feedDiscoveryInfo.getRedirectFeedUrl(),
+                feedDiscoveryInfo.getRedirectHttpStatusCode(),
+                feedDiscoveryInfo.getRedirectHttpStatusMessage(),
                 feedDiscoveryInfo.getTitle(),
                 feedDiscoveryInfo.getDescription(),
                 feedDiscoveryInfo.getFeedType(),
@@ -107,7 +130,8 @@ public class ThumbnailedFeedDiscovery implements Serializable {
                 feedDiscoveryInfo.getWebMaster(),
                 feedDiscoveryInfo.getUri(),
                 feedDiscoveryInfo.getCategories(),
-                feedDiscoveryInfo.getSampleEntries()
+                feedDiscoveryInfo.getSampleEntries(),
+                feedDiscoveryInfo.isUrlUpgradable()
         );
     }
 }
