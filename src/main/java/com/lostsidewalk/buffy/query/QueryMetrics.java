@@ -23,8 +23,11 @@ public class QueryMetrics {
     // timestamp
     Date importTimestamp;
 
-    // item ct
+    // import ct
     Integer importCt;
+
+    // persist ct
+    Integer persistCt;
 
     // error type
     QueryExceptionType errorType;

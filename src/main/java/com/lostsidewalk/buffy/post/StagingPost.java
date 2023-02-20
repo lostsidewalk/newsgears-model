@@ -64,6 +64,9 @@ public class StagingPost implements Serializable {
     private final String importerDesc;
 
     @NotNull
+    private final Long queryId;
+
+    @NotNull
     private final Serializable sourceObj;
 
     private final String sourceName;
@@ -133,6 +136,7 @@ public class StagingPost implements Serializable {
     StagingPost(String importerId,
                 Long feedId,
                 String importerDesc,
+                Long queryId,
                 Serializable sourceObj,
                 String sourceName,
                 String sourceUrl,
@@ -161,6 +165,7 @@ public class StagingPost implements Serializable {
         this.importerId = importerId;
         this.feedId = feedId;
         this.importerDesc = trimToLength(IMPORTER_DESC_FIELD_NAME, importerDesc, 512); // 512
+        this.queryId = queryId;
         this.sourceObj = sourceObj; // json
         this.sourceName = trimToLength(SOURCE_NAME_FIELD_NAME, sourceName, 256); // 256
         this.sourceUrl = trimToLength(SOURCE_URL_FIELD_NAME, sourceUrl, 1024); // 1024
@@ -206,6 +211,7 @@ public class StagingPost implements Serializable {
             String importerId,
             Long feedId,
             String importerDesc,
+            Long queryId,
             Serializable sourceObj,
             String sourceName,
             String sourceUrl,
@@ -235,6 +241,7 @@ public class StagingPost implements Serializable {
                 importerId,
                 feedId,
                 importerDesc,
+                queryId,
                 sourceObj,
                 sourceName,
                 sourceUrl,
@@ -269,6 +276,7 @@ public class StagingPost implements Serializable {
             String importerId,
             Long feedId,
             String importerDesc,
+            Long queryId,
             Serializable sourceObj,
             String sourceName,
             String sourceUrl,
@@ -299,6 +307,7 @@ public class StagingPost implements Serializable {
                 importerId,
                 feedId,
                 importerDesc,
+                queryId,
                 sourceObj,
                 sourceName,
                 sourceUrl,
@@ -342,6 +351,7 @@ public class StagingPost implements Serializable {
     }
 
     public static final StagingPost END_IMPORT = new StagingPost(
+            null,
             null,
             null,
             null,
