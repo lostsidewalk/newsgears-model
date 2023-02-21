@@ -322,17 +322,17 @@ public class FeedDiscoveryInfo implements Serializable {
     private static final String CATEGORIES_FIELD_NAME = "categories";
 
     @SuppressWarnings("unused")
-    public static FeedDiscoveryInfo discoverUrl(String url) throws FeedDiscoveryException {
-        return discoverUrl(url, null, null);
+    public static FeedDiscoveryInfo discoverUrl(String url, String userAgent) throws FeedDiscoveryException {
+        return discoverUrl(url, null, null, userAgent);
     }
 
-    public static FeedDiscoveryInfo discoverUrl(String url, String username, String password) throws FeedDiscoveryException {
-        return discoverUrl(url, username, password, false, 0);
+    public static FeedDiscoveryInfo discoverUrl(String url, String username, String password, String userAgent) throws FeedDiscoveryException {
+        return discoverUrl(url, username, password, userAgent, false, 0);
     }
 
-    private static final String FEED_DISCOVERY_USER_AGENT = "Lost Sidewalk FeedGears RSS Aggregator v.0.3 feed discovery process";
+//    private static final String FEED_DISCOVERY_USER_AGENT = "Lost Sidewalk FeedGears RSS Aggregator v.0.3 feed discovery process";
 
-    public static FeedDiscoveryInfo discoverUrl(String url, String username, String password, boolean followUnsecureRedirects, int depth) throws FeedDiscoveryException {
+    public static FeedDiscoveryInfo discoverUrl(String url, String username, String password, String userAgent, boolean followUnsecureRedirects, int depth) throws FeedDiscoveryException {
         log.debug("Performing feed discovery for URL={}", url);
         Integer statusCode = null;
         String statusMessage = null;
@@ -345,7 +345,7 @@ public class FeedDiscoveryInfo implements Serializable {
             // add authentication, if any
             boolean hasAuthenticationHeaders = addAuthenticationHeader(feedConnection, username, password);
             // add the UA header
-            addUserAgentHeader(feedConnection);
+            feedConnection.setRequestProperty("User-Agent", userAgent);
             // add the cache control header
             addCacheControlHeader(feedConnection);
             // get the (initial) status response
@@ -374,7 +374,7 @@ public class FeedDiscoveryInfo implements Serializable {
                 // add authentication to the redirect, if any
                 addAuthenticationHeader(feedConnection, username, password);
                 // add the UA header to the redirect
-                addUserAgentHeader(feedConnection);
+                feedConnection.setRequestProperty("User-Agent", userAgent);
                 // get the redirect status response
                 redirectStatusCode = getStatusCode(feedConnection);
                 // get the redirect status message
@@ -405,7 +405,7 @@ public class FeedDiscoveryInfo implements Serializable {
                 // non-redirected HTTP call which resulted in success
                 if (isSuccess(statusCode) && "http".equalsIgnoreCase(feedConnection.getURL().getProtocol())) {
                     // attempt HTTPS
-                    isUrlUpgradable = isUrlUpgradable(url, username, password, depth);
+                    isUrlUpgradable = isUrlUpgradable(url, username, password, userAgent, depth);
                     // redirected HTTP call which resulted in success
                 } else {
                     boolean isRedirect = redirectStatusCode != null;
@@ -413,7 +413,7 @@ public class FeedDiscoveryInfo implements Serializable {
                     boolean isRedirectHttp = isRedirect && "http".equalsIgnoreCase(create(redirectUrl).toURL().getProtocol());
                     if (isRedirect && isRedirectSuccess && isRedirectHttp) {
                         // attempt HTTPS
-                        isUrlUpgradable = isUrlUpgradable(redirectUrl, username, password, depth);
+                        isUrlUpgradable = isUrlUpgradable(redirectUrl, username, password, userAgent, depth);
                     }
                 }
             } catch (Exception ignored) {
@@ -487,10 +487,6 @@ public class FeedDiscoveryInfo implements Serializable {
         }
 
         return false;
-    }
-
-    private static void addUserAgentHeader(HttpURLConnection feedConnection) {
-        feedConnection.setRequestProperty("User-Agent", FEED_DISCOVERY_USER_AGENT);
     }
 
     private static void addCacheControlHeader(HttpURLConnection feedConnection) {
@@ -632,11 +628,11 @@ public class FeedDiscoveryInfo implements Serializable {
         return ContentObject.from(syndContent.getType(), syndContent.getValue());
     }
 
-    private static boolean isUrlUpgradable(String url, String username, String password, int depth) {
+    private static boolean isUrlUpgradable(String url, String username, String password, String userAgent, int depth) {
         if (url.startsWith("http") && !url.startsWith("https")) {
             String newUrl = replaceOnce(url, "http", "https");
             try {
-                FeedDiscoveryInfo newFeedDiscoveryInfo = discoverUrl(newUrl, username, password, false, depth + 1);
+                FeedDiscoveryInfo newFeedDiscoveryInfo = discoverUrl(newUrl, username, password, userAgent, false, depth + 1);
                 if (
                         // either initial discovery or redirected discovery produced an HTTP 200
                         (isSuccess(newFeedDiscoveryInfo.getHttpStatusCode()) || isSuccess(newFeedDiscoveryInfo.getRedirectHttpStatusCode()))
