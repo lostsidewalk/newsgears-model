@@ -1,5 +1,6 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.MediaEntryModule;
 import com.rometools.modules.mediarss.MediaEntryModuleImpl;
 import com.rometools.modules.mediarss.types.MediaContent;
@@ -7,18 +8,22 @@ import com.rometools.modules.mediarss.types.MediaGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@JsonInclude(NON_EMPTY)
 public class PostMedia extends BasePostMediaObject implements Serializable {
 
-    public static long serialVersionUID = 983403122303L;
+    @Serial
+    private static final long serialVersionUID = 983403122303L;
 
     private final PostMediaMetadata postMediaMetadata;
 

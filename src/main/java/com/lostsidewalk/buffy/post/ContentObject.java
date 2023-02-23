@@ -1,13 +1,19 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
+@JsonInclude(NON_EMPTY)
 public class ContentObject implements Serializable {
 
-    public static final long serialVersionUID = 2354987329183759L;
+    @Serial
+    private static final long serialVersionUID = 2354987329183759L;
 
     private String type;
 

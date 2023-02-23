@@ -1,15 +1,18 @@
 package com.lostsidewalk.buffy.feed;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.lostsidewalk.buffy.feed.FeedDefinition.FeedStatus.ENABLED;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static lombok.AccessLevel.PUBLIC;
@@ -17,7 +20,11 @@ import static org.apache.commons.lang3.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Data
-public class FeedDefinition {
+@JsonInclude(NON_EMPTY)
+public class FeedDefinition implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 294234688900249823L;
 
     @SuppressWarnings("unused")
     public enum FeedStatus {

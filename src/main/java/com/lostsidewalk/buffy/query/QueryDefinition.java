@@ -1,13 +1,21 @@
 package com.lostsidewalk.buffy.query;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class QueryDefinition {
+@JsonInclude(NON_EMPTY)
+public class QueryDefinition implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 29823234223L;
 
     Long id;
 

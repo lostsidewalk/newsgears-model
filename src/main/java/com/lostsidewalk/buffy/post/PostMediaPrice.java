@@ -1,13 +1,22 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Price;
 import com.rometools.modules.mediarss.types.Price.Type;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.net.URL;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaPrice {
+@JsonInclude(NON_EMPTY)
+public class PostMediaPrice implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 23412156442343L;
 
     private Type type;
 

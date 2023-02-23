@@ -1,12 +1,21 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Expression;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.rometools.modules.mediarss.types.Expression.*;
 
 @Data
-public class PostMediaExpression {
+@JsonInclude(NON_EMPTY)
+public class PostMediaExpression implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1223982304982233L;
 
     private String expression;
 

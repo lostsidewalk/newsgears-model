@@ -1,10 +1,20 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Credit;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaCredit {
+@JsonInclude(NON_EMPTY)
+public class PostMediaCredit implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 29823012319823L;
 
     private String name;
 

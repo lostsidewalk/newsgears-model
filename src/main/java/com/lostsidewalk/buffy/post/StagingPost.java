@@ -1,17 +1,20 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.lang.Math.min;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static lombok.AccessLevel.PACKAGE;
@@ -21,13 +24,17 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 @Slf4j
 @Data
+@JsonInclude(NON_EMPTY)
 public class StagingPost implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 295664561249823L;
 
     private static final String IMPORTER_DESC_FIELD_NAME = "importerDesc";
 
-    private static final String SOURCE_NAME_FIELD_NAME = "sourceName";
-
-    private static final String SOURCE_URL_FIELD_NAME = "sourceUrl";
+//    private static final String SOURCE_NAME_FIELD_NAME = "sourceName";
+//
+//    private static final String SOURCE_URL_FIELD_NAME = "sourceUrl";
 
     private static final String POST_TITLE_FIELD_NAME = "postTitle";
 
@@ -66,12 +73,12 @@ public class StagingPost implements Serializable {
     @NotNull
     private final Long queryId;
 
-    @NotNull
-    private final Serializable sourceObj;
-
-    private final String sourceName;
-
-    private final String sourceUrl;
+//    @NotNull
+//    private final Serializable sourceObj;
+//
+//    private final String sourceName;
+//
+//    private final String sourceUrl;
 
     @NotNull
     private final ContentObject postTitle;
@@ -166,9 +173,9 @@ public class StagingPost implements Serializable {
         this.feedId = feedId;
         this.importerDesc = trimToLength(IMPORTER_DESC_FIELD_NAME, importerDesc, 512); // 512
         this.queryId = queryId;
-        this.sourceObj = sourceObj; // json
-        this.sourceName = trimToLength(SOURCE_NAME_FIELD_NAME, sourceName, 256); // 256
-        this.sourceUrl = trimToLength(SOURCE_URL_FIELD_NAME, sourceUrl, 1024); // 1024
+//        this.sourceObj = sourceObj; // json
+//        this.sourceName = trimToLength(SOURCE_NAME_FIELD_NAME, sourceName, 256); // 256
+//        this.sourceUrl = trimToLength(SOURCE_URL_FIELD_NAME, sourceUrl, 1024); // 1024
         this.postTitle = postTitle;
         this.postDesc = postDesc;
         this.postContents = postContents;

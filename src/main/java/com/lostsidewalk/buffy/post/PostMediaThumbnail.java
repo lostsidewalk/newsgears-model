@@ -1,13 +1,22 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Thumbnail;
 import com.rometools.modules.mediarss.types.Time;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.net.URI;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaThumbnail {
+@JsonInclude(NON_EMPTY)
+public class PostMediaThumbnail implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 23546732943L;
 
     Integer height;
 

@@ -1,19 +1,27 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PostMediaMetadata extends BasePostMediaObject {
+@JsonInclude(NON_EMPTY)
+public class PostMediaMetadata extends BasePostMediaObject implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 212267345121249823L;
 
     List<PostMediaThumbnail> thumbnails;
     PostMediaCommunity community;

@@ -1,17 +1,23 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.itunes.EntryInformationImpl;
 import com.rometools.modules.itunes.FeedInformationImpl;
 import com.rometools.modules.itunes.ITunes;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.net.URL;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
+@JsonInclude(NON_EMPTY)
 public class PostITunes implements Serializable {
 
-    public static long serialVersionUID = 983403122303L;
+    @Serial
+    private static final long serialVersionUID = 983403122303L;
 
     String author;
     boolean isBlock; // wtf does this mean

@@ -2,6 +2,7 @@ package com.lostsidewalk.buffy.discovery;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
@@ -9,7 +10,8 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 @Data
 public class ThumbnailedFeedDiscoveryImage implements Serializable {
 
-    public static final long serialVersionUID = 120349823509L;
+    @Serial
+    private static final long serialVersionUID = 120349823509L;
 
     String title;
     String description;

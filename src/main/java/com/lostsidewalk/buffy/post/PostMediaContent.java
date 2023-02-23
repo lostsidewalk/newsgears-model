@@ -1,12 +1,21 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.MediaContent;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Optional.ofNullable;
 
 @Data
-public class PostMediaContent {
+@JsonInclude(NON_EMPTY)
+public class PostMediaContent implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2982334234249823L;
 
     Integer audioChannels;
     Float bitRate;

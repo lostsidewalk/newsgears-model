@@ -1,10 +1,20 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Status;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaStatus {
+@JsonInclude(NON_EMPTY)
+public class PostMediaStatus implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 23549342344343412L;
 
     private String reason;
 

@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.discovery;
 import com.lostsidewalk.buffy.post.ContentObject;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
 @Data
 public class ThumbnailedFeedDiscovery implements Serializable {
 
-    public static final long serialVersionUID = 213492340123L;
+    @Serial
+    private static final long serialVersionUID = 112341230982130984L;
 
     Long id;
     String feedUrl;

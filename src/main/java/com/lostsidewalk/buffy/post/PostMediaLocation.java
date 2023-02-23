@@ -1,11 +1,21 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Location;
 import com.rometools.modules.mediarss.types.Time;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaLocation {
+@JsonInclude(NON_EMPTY)
+public class PostMediaLocation implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 223123124554823L;
 
     private String description;
 

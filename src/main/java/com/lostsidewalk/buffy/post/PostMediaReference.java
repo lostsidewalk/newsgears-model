@@ -1,14 +1,23 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.PlayerReference;
 import com.rometools.modules.mediarss.types.Reference;
 import com.rometools.modules.mediarss.types.UrlReference;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.net.URI;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaReference {
+@JsonInclude(NON_EMPTY)
+public class PostMediaReference implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 45452133354944442L;
 
     private URI uri;
 

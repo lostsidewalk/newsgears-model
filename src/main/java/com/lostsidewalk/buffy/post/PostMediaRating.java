@@ -1,10 +1,20 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Rating;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaRating {
+@JsonInclude(NON_EMPTY)
+public class PostMediaRating implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 411442343L;
 
     private String scheme;
 

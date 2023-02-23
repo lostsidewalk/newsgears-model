@@ -1,12 +1,21 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.PeerLink;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.net.URL;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @Data
-public class PostMediaPeerLink {
+@JsonInclude(NON_EMPTY)
+public class PostMediaPeerLink implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 18092731098L;
 
     private String type;
 

@@ -1,17 +1,25 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Community;
 import com.rometools.modules.mediarss.types.Tag;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Set;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 @Data
-public class PostMediaCommunity {
+@JsonInclude(NON_EMPTY)
+public class PostMediaCommunity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 29823049823L;
 
     PostMediaStarRating postMediaStarRating;
 
