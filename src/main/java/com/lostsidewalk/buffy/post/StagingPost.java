@@ -1,5 +1,6 @@
 package com.lostsidewalk.buffy.post;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.Setter;
@@ -31,10 +32,6 @@ public class StagingPost implements Serializable {
     private static final long serialVersionUID = 295664561249823L;
 
     private static final String IMPORTER_DESC_FIELD_NAME = "importerDesc";
-
-//    private static final String SOURCE_NAME_FIELD_NAME = "sourceName";
-//
-//    private static final String SOURCE_URL_FIELD_NAME = "sourceUrl";
 
     private static final String POST_TITLE_FIELD_NAME = "postTitle";
 
@@ -71,14 +68,8 @@ public class StagingPost implements Serializable {
     private final String importerDesc;
 
     @NotNull
+    @JsonIgnore
     private final Long queryId;
-
-//    @NotNull
-//    private final Serializable sourceObj;
-//
-//    private final String sourceName;
-//
-//    private final String sourceUrl;
 
     @NotNull
     private final ContentObject postTitle;
@@ -98,17 +89,21 @@ public class StagingPost implements Serializable {
 
     private final List<PostUrl> postUrls;
 
+    @JsonIgnore
     private final String postImgUrl;
 
+    @JsonIgnore
     private final String postImgTransportIdent;
 
     @NotNull
     private final Date importTimestamp;
 
     @NotBlank
+    @JsonIgnore
     private final String postHash;
 
     @NotBlank
+    @JsonIgnore
     private final String username;
 
     private final String postComment;
@@ -144,9 +139,6 @@ public class StagingPost implements Serializable {
                 Long feedId,
                 String importerDesc,
                 Long queryId,
-                Serializable sourceObj,
-                String sourceName,
-                String sourceUrl,
                 ContentObject postTitle,
                 ContentObject postDesc,
                 List<ContentObject> postContents,
@@ -173,9 +165,6 @@ public class StagingPost implements Serializable {
         this.feedId = feedId;
         this.importerDesc = trimToLength(IMPORTER_DESC_FIELD_NAME, importerDesc, 512); // 512
         this.queryId = queryId;
-//        this.sourceObj = sourceObj; // json
-//        this.sourceName = trimToLength(SOURCE_NAME_FIELD_NAME, sourceName, 256); // 256
-//        this.sourceUrl = trimToLength(SOURCE_URL_FIELD_NAME, sourceUrl, 1024); // 1024
         this.postTitle = postTitle;
         this.postDesc = postDesc;
         this.postContents = postContents;
@@ -219,9 +208,6 @@ public class StagingPost implements Serializable {
             Long feedId,
             String importerDesc,
             Long queryId,
-            Serializable sourceObj,
-            String sourceName,
-            String sourceUrl,
             ContentObject postTitle,
             ContentObject postDesc,
             List<ContentObject> postContents,
@@ -249,9 +235,6 @@ public class StagingPost implements Serializable {
                 feedId,
                 importerDesc,
                 queryId,
-                sourceObj,
-                sourceName,
-                sourceUrl,
                 postTitle,
                 postDesc,
                 postContents,
@@ -284,9 +267,6 @@ public class StagingPost implements Serializable {
             Long feedId,
             String importerDesc,
             Long queryId,
-            Serializable sourceObj,
-            String sourceName,
-            String sourceUrl,
             ContentObject postTitle,
             ContentObject postDesc,
             List<ContentObject> postContents,
@@ -315,9 +295,6 @@ public class StagingPost implements Serializable {
                 feedId,
                 importerDesc,
                 queryId,
-                sourceObj,
-                sourceName,
-                sourceUrl,
                 postTitle,
                 postDesc,
                 postContents,
@@ -358,9 +335,6 @@ public class StagingPost implements Serializable {
     }
 
     public static final StagingPost END_IMPORT = new StagingPost(
-            null,
-            null,
-            null,
             null,
             null,
             null,
