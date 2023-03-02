@@ -1,9 +1,11 @@
 package com.lostsidewalk.buffy.post;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rometools.modules.itunes.EntryInformation;
 import com.rometools.modules.itunes.EntryInformationImpl;
 import com.rometools.modules.itunes.FeedInformationImpl;
 import com.rometools.modules.itunes.ITunes;
+import com.rometools.modules.itunes.types.Duration;
 import lombok.Data;
 
 import java.io.Serial;
@@ -28,8 +30,17 @@ public class PostITunes implements Serializable {
     String[] keywords;
     String subTitle;
     String summary;
+    boolean isCloseCaptioned;
+    Duration duration;
+    Integer episode;
+    String episodeType;
+    Integer order;
+    Integer season;
+    String title;
 
-    PostITunes(String author, boolean isBlock, boolean isExplicit, Boolean isExplicitNullable, URL image, String imageUri, String[] keywords, String subTitle, String summary) {
+    PostITunes(String author, boolean isBlock, boolean isExplicit, Boolean isExplicitNullable, URL image, String imageUri, String[] keywords, String subTitle, String summary,
+               boolean isCloseCaptioned, Duration duration, Integer episode, String episodeType, Integer order, Integer season, String title)
+    {
         this.author = author;
         this.isBlock = isBlock;
         this.isExplicit = isExplicit;
@@ -39,6 +50,13 @@ public class PostITunes implements Serializable {
         this.keywords = keywords;
         this.subTitle = subTitle;
         this.summary = summary;
+        this.isCloseCaptioned = isCloseCaptioned;
+        this.duration = duration;
+        this.episode = episode;
+        this.episodeType = episodeType;
+        this.order = order;
+        this.season = season;
+        this.title = title;
     }
 
     public static PostITunes from(ITunes iTunes) {
@@ -52,6 +70,23 @@ public class PostITunes implements Serializable {
         String subTitle = iTunes.getSubtitle();
         String summary = iTunes.getSummary();
 
+        boolean isCloseCaptioned = false;
+        com.rometools.modules.itunes.types.Duration duration = null;
+        Integer episode = null;
+        String episodeType = null;
+        Integer order = null;
+        Integer season = null;
+        String title = null;
+        if (iTunes instanceof EntryInformation entryInformation) {
+            isCloseCaptioned = entryInformation.getClosedCaptioned();
+            duration = entryInformation.getDuration();
+            episode = entryInformation.getEpisode();
+            episodeType = entryInformation.getEpisodeType();
+            order = entryInformation.getOrder();
+            season = entryInformation.getSeason();
+            title = entryInformation.getTitle();
+        }
+
         return new PostITunes(
                 author,
                 isBlock,
@@ -61,7 +96,14 @@ public class PostITunes implements Serializable {
                 imageUri,
                 keywords,
                 subTitle,
-                summary
+                summary,
+                isCloseCaptioned,
+                duration,
+                episode,
+                episodeType,
+                order,
+                season,
+                title
         );
     }
 
