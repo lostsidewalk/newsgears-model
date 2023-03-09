@@ -90,7 +90,7 @@ public class StagingPost implements Serializable {
     private final List<PostUrl> postUrls;
 
     @JsonIgnore
-    private final String postImgUrl;
+    private final String postImgUrl; // TODO: rename this to 'postImageUrl'
 
     @JsonIgnore
     private final String postImgTransportIdent;
