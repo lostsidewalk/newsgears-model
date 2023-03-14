@@ -1,11 +1,13 @@
 package com.lostsidewalk.buffy;
 
+import com.lostsidewalk.buffy.discovery.FeedDiscoveryInfo;
 import com.lostsidewalk.buffy.post.StagingPost;
 import com.lostsidewalk.buffy.query.QueryDefinition;
 import com.lostsidewalk.buffy.query.QueryMetrics;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -28,7 +30,7 @@ public interface Importer {
         }
     }
 
-    ImportResult doImport(List<QueryDefinition> queryDefinitions);
+    ImportResult doImport(List<QueryDefinition> queryDefinitions, Map<String, FeedDiscoveryInfo> discoveryCache);
 
     interface ImportResponseCallback {
         ImportResult onSuccess(Set<StagingPost> stagingPosts);

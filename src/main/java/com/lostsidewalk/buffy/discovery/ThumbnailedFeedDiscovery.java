@@ -1,6 +1,7 @@
 package com.lostsidewalk.buffy.discovery;
 
 import com.lostsidewalk.buffy.post.ContentObject;
+import com.lostsidewalk.buffy.post.StagingPost;
 import lombok.Data;
 
 import java.io.Serial;
@@ -40,7 +41,7 @@ public class ThumbnailedFeedDiscovery implements Serializable {
     String webMaster;
     String uri;
     List<String> categories;
-    List<FeedDiscoverySampleItem> sampleEntries;
+    List<StagingPost> sampleEntries;
     boolean isUrlUpgradable;
 
     ThumbnailedFeedDiscovery(
@@ -70,7 +71,7 @@ public class ThumbnailedFeedDiscovery implements Serializable {
             String webMaster,
             String uri,
             List<String> categories,
-            List<FeedDiscoverySampleItem> sampleEntries,
+            List<StagingPost> sampleEntries,
             boolean isUrlUpgradable) {
         this.id = id;
         this.feedUrl = feedUrl;

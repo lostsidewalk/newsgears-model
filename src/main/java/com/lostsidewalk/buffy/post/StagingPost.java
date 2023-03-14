@@ -2,6 +2,7 @@ package com.lostsidewalk.buffy.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lostsidewalk.buffy.query.QueryDefinition;
 import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -316,6 +317,36 @@ public class StagingPost implements Serializable {
                 expirationTimestamp,
                 enclosures,
                 lastUpdatedTimestamp
+        );
+    }
+
+    public static StagingPost from(StagingPost copy, QueryDefinition queryDefinition) {
+        return new StagingPost(
+                copy.importerId,
+                queryDefinition.getFeedId(),
+                queryDefinition.getQueryText(),
+                queryDefinition.getId(),
+                copy.postTitle,
+                copy.postDesc,
+                copy.postContents,
+                copy.postMedia,
+                copy.postITunes,
+                copy.postUrl,
+                copy.postUrls,
+                copy.postImgUrl,
+                copy.postImgTransportIdent,
+                copy.importTimestamp,
+                copy.postHash,
+                queryDefinition.getUsername(),
+                copy.postComment,
+                copy.postRights,
+                copy.contributors,
+                copy.authors,
+                copy.postCategories,
+                copy.publishTimestamp,
+                copy.expirationTimestamp,
+                copy.enclosures,
+                copy.lastUpdatedTimestamp
         );
     }
 
