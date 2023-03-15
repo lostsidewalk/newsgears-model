@@ -50,7 +50,7 @@ public class StagingPost implements Serializable {
 
     @SuppressWarnings("unused")
     public enum PostPubStatus {
-        PUB_PENDING, DEPUB_PENDING, PURGE_PENDING
+        PUB_PENDING, DEPUB_PENDING, ARCHIVED, PURGE_PENDING
     }
 
     @SuppressWarnings("unused")

@@ -38,6 +38,9 @@ public class QueryMetrics implements Serializable {
     // persist ct
     Integer persistCt;
 
+    // archive ct
+    Integer archiveCt;
+
     // error type
     QueryExceptionType errorType;
 
