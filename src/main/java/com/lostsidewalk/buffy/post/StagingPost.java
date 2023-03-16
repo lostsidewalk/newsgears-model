@@ -324,7 +324,7 @@ public class StagingPost implements Serializable {
         return new StagingPost(
                 copy.importerId,
                 queryDefinition.getFeedId(),
-                queryDefinition.getQueryText(),
+                trimToEmpty(defaultString(queryDefinition.getQueryTitle(), queryDefinition.getQueryText())),
                 queryDefinition.getId(),
                 copy.postTitle,
                 copy.postDesc,
