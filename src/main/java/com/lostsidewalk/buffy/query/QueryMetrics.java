@@ -38,6 +38,9 @@ public class QueryMetrics implements Serializable {
     // persist ct
     Integer persistCt;
 
+    // skip ct
+    Integer skipCt;
+
     // archive ct
     Integer archiveCt;
 
