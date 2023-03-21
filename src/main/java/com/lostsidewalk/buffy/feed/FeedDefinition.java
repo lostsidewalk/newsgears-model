@@ -66,9 +66,12 @@ public class FeedDefinition implements Serializable {
 
     private Date lastDeployed;
 
+    private Boolean isAuthenticated;
+
     FeedDefinition(String ident, String title, String description, String generator, String transportIdent,
                    String username, FeedStatus feedStatus, Serializable exportConfig, String copyright,
-                   String language, String feedImgSrc, String feedImgTransportIdent, Date lastDeployed)
+                   String language, String feedImgSrc, String feedImgTransportIdent, Date lastDeployed,
+                   Boolean isAuthenticated)
     {
         this.ident = ident;
         this.title = title;
@@ -83,6 +86,7 @@ public class FeedDefinition implements Serializable {
         this.feedImgSrc = feedImgSrc;
         this.feedImgTransportIdent = feedImgTransportIdent;
         this.lastDeployed = lastDeployed;
+        this.isAuthenticated = isAuthenticated;
     }
 
     @SuppressWarnings("unused")
@@ -99,7 +103,8 @@ public class FeedDefinition implements Serializable {
             String language,
             String feedImgSrc,
             String feedImgTransportIdent,
-            Date lastDeployed)
+            Date lastDeployed,
+            Boolean isAuthenticated)
     {
         return new FeedDefinition(
                 ident,
@@ -114,7 +119,8 @@ public class FeedDefinition implements Serializable {
                 language,
                 feedImgSrc,
                 feedImgTransportIdent,
-                lastDeployed);
+                lastDeployed,
+                isAuthenticated);
     }
 
     @SuppressWarnings("unused")
@@ -128,7 +134,8 @@ public class FeedDefinition implements Serializable {
             Serializable exportConfig,
             String copyright,
             String language,
-            String feedImgSrc)
+            String feedImgSrc,
+            Boolean isAuthenticated)
     {
         String feedImgTransportIdent = getFeedImgSrcHash(feedImgSrc);
         return new FeedDefinition(
@@ -144,7 +151,8 @@ public class FeedDefinition implements Serializable {
                 language,
                 feedImgSrc,
                 feedImgTransportIdent,
-                null);
+                null,
+                isAuthenticated);
     }
 
     private static String getFeedImgSrcHash(String imageSrc) {
