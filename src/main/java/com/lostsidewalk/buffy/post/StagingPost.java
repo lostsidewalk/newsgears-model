@@ -320,7 +320,7 @@ public class StagingPost implements Serializable {
         );
     }
 
-    public static StagingPost from(StagingPost copy, QueryDefinition queryDefinition) {
+    public static StagingPost from(StagingPost copy, QueryDefinition queryDefinition, String postHash) {
         return new StagingPost(
                 copy.importerId,
                 queryDefinition.getFeedId(),
@@ -336,7 +336,7 @@ public class StagingPost implements Serializable {
                 copy.postImgUrl,
                 copy.postImgTransportIdent,
                 copy.importTimestamp,
-                copy.postHash,
+                postHash,
                 queryDefinition.getUsername(),
                 copy.postComment,
                 copy.postRights,
