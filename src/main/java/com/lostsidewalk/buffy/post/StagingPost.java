@@ -69,7 +69,6 @@ public class StagingPost implements Serializable {
     private final String importerDesc;
 
     @NotNull
-    @JsonIgnore
     private final Long queryId;
 
     @NotNull

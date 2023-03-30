@@ -30,8 +30,8 @@ public class ThumbnailedFeedDiscovery implements Serializable {
     String docs;
     String encoding;
     String generator;
-    ThumbnailedFeedDiscoveryImage image;
-    ThumbnailedFeedDiscoveryImage icon;
+    FeedDiscoveryImageInfo image;
+    FeedDiscoveryImageInfo icon;
     String language;
     String link;
     String managingEditor;
@@ -60,8 +60,8 @@ public class ThumbnailedFeedDiscovery implements Serializable {
             String docs,
             String encoding,
             String generator,
-            ThumbnailedFeedDiscoveryImage image,
-            ThumbnailedFeedDiscoveryImage icon,
+            FeedDiscoveryImageInfo image,
+            FeedDiscoveryImageInfo icon,
             String language,
             String link,
             String managingEditor,
@@ -104,8 +104,8 @@ public class ThumbnailedFeedDiscovery implements Serializable {
     }
 
     public static ThumbnailedFeedDiscovery from(FeedDiscoveryInfo feedDiscoveryInfo,
-                                                        ThumbnailedFeedDiscoveryImage feedImage,
-                                                        ThumbnailedFeedDiscoveryImage feedIcon) {
+                                                FeedDiscoveryImageInfo feedImage,
+                                                FeedDiscoveryImageInfo feedIcon) {
         return new ThumbnailedFeedDiscovery(
                 feedDiscoveryInfo.getId(),
                 feedDiscoveryInfo.getFeedUrl(),

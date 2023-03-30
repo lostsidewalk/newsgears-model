@@ -7,7 +7,9 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Currency;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
@@ -20,13 +22,13 @@ public class PostMediaPrice implements Serializable {
 
     private Type type;
 
-    private Double price;
+    private BigDecimal price;
 
-    private String currency;
+    private Currency currency;
 
     private URL info;
 
-    PostMediaPrice(Type type, Double price, String currency, URL info) {
+    PostMediaPrice(Type type, BigDecimal price, Currency currency, URL info) {
         this.type = type;
         this.price = price;
         this.currency = currency;
