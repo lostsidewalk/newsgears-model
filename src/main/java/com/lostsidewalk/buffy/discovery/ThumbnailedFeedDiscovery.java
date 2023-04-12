@@ -43,6 +43,7 @@ public class ThumbnailedFeedDiscovery implements Serializable {
     List<String> categories;
     List<StagingPost> sampleEntries;
     boolean isUrlUpgradable;
+    FeedRecommendationInfo feedRecommendationInfo;
 
     ThumbnailedFeedDiscovery(
             Long id,
@@ -72,7 +73,8 @@ public class ThumbnailedFeedDiscovery implements Serializable {
             String uri,
             List<String> categories,
             List<StagingPost> sampleEntries,
-            boolean isUrlUpgradable) {
+            boolean isUrlUpgradable,
+            FeedRecommendationInfo feedRecommendationInfo) {
         this.id = id;
         this.feedUrl = feedUrl;
         this.httpStatusCode = httpStatusCode;
@@ -101,11 +103,13 @@ public class ThumbnailedFeedDiscovery implements Serializable {
         this.categories = categories;
         this.sampleEntries = sampleEntries;
         this.isUrlUpgradable = isUrlUpgradable;
+        this.feedRecommendationInfo = feedRecommendationInfo;
     }
 
     public static ThumbnailedFeedDiscovery from(FeedDiscoveryInfo feedDiscoveryInfo,
                                                 FeedDiscoveryImageInfo feedImage,
-                                                FeedDiscoveryImageInfo feedIcon) {
+                                                FeedDiscoveryImageInfo feedIcon,
+                                                FeedRecommendationInfo feedRecommendationInfo) {
         return new ThumbnailedFeedDiscovery(
                 feedDiscoveryInfo.getId(),
                 feedDiscoveryInfo.getFeedUrl(),
@@ -134,7 +138,8 @@ public class ThumbnailedFeedDiscovery implements Serializable {
                 feedDiscoveryInfo.getUri(),
                 feedDiscoveryInfo.getCategories(),
                 feedDiscoveryInfo.getSampleEntries(),
-                feedDiscoveryInfo.isUrlUpgradable()
+                feedDiscoveryInfo.isUrlUpgradable(),
+                feedRecommendationInfo
         );
     }
 }

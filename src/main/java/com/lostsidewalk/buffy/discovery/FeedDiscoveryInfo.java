@@ -24,6 +24,7 @@ import static com.lostsidewalk.buffy.discovery.FeedDiscoveryInfo.FeedDiscoveryEx
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
 
+
 @Slf4j
 @Data
 public class FeedDiscoveryInfo implements Serializable {
@@ -59,11 +60,11 @@ public class FeedDiscoveryInfo implements Serializable {
     String managingEditor;
     Date publishedDate;
     String styleSheet;
-    ArrayList<String> supportedTypes;
+    List<String> supportedTypes;
     String webMaster;
     String uri;
-    ArrayList<String> categories;
-    ArrayList<StagingPost> sampleEntries;
+    List<String> categories;
+    List<StagingPost> sampleEntries;
     boolean isUrlUpgradable;
 
     // errors
@@ -93,11 +94,11 @@ public class FeedDiscoveryInfo implements Serializable {
             String managingEditor,
             Date publishedDate,
             String styleSheet,
-            ArrayList<String> supportedTypes,
+            List<String> supportedTypes,
             String webMaster,
             String uri,
-            ArrayList<String> categories,
-            ArrayList<StagingPost> sampleEntries,
+            List<String> categories,
+            List<StagingPost> sampleEntries,
             boolean isUrlUpgradable)
     {
         this.feedUrl = feedUrl;
@@ -150,11 +151,11 @@ public class FeedDiscoveryInfo implements Serializable {
                                          String managingEditor,
                                          Date publishedDate,
                                          String styleSheet,
-                                         ArrayList<String> supportedTypes,
+                                         List<String> supportedTypes,
                                          String webMaster,
                                          String uri,
-                                         ArrayList<String> categories,
-                                         ArrayList<StagingPost> sampleEntries,
+                                         List<String> categories,
+                                         List<StagingPost> sampleEntries,
                                          boolean isUrlUpgradable)
     {
         return new FeedDiscoveryInfo(
@@ -279,9 +280,9 @@ public class FeedDiscoveryInfo implements Serializable {
 
     @Setter(PRIVATE)
     @Getter(PACKAGE)
-    ArrayList<String> feedForeignMarkupStrs;
+    List<String> feedForeignMarkupStrs;
 
     @Setter(PRIVATE)
     @Getter(PACKAGE)
-    HashSet<String> postForeignMarkupStrs;
+    Set<String> postForeignMarkupStrs;
 }
