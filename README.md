@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/lostsidewalk/newsgears-model">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="144" height="144" style="box-shadow: 2px 2px 2px rgba(64,64,64,0.7)">
   </a>
 
 <h3 align="center">FeedGears RSS</h3>
