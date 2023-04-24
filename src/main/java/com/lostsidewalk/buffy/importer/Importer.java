@@ -1,4 +1,4 @@
-package com.lostsidewalk.buffy;
+package com.lostsidewalk.buffy.importer;
 
 import com.lostsidewalk.buffy.discovery.FeedDiscoveryInfo;
 import com.lostsidewalk.buffy.post.StagingPost;

@@ -1,12 +1,13 @@
-package com.lostsidewalk.buffy;
+package com.lostsidewalk.buffy.auth;
 
+import com.lostsidewalk.buffy.auth.AuthProvider;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-import static com.lostsidewalk.buffy.AuthProvider.LOCAL;
+import static com.lostsidewalk.buffy.auth.AuthProvider.LOCAL;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 @Data

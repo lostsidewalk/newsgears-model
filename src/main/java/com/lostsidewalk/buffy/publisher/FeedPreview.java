@@ -1,4 +1,4 @@
-package com.lostsidewalk.buffy;
+package com.lostsidewalk.buffy.publisher;
 
 import lombok.Data;
 

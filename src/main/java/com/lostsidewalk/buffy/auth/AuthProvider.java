@@ -1,4 +1,4 @@
-package com.lostsidewalk.buffy;
+package com.lostsidewalk.buffy.auth;
 
 import java.util.HashMap;
 import java.util.Map;

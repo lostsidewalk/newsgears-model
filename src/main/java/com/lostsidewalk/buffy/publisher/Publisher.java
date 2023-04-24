@@ -1,4 +1,4 @@
-package com.lostsidewalk.buffy;
+package com.lostsidewalk.buffy.publisher;
 
 import com.lostsidewalk.buffy.feed.FeedDefinition;
 import com.lostsidewalk.buffy.post.StagingPost;

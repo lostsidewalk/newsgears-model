@@ -1,4 +1,4 @@
-package com.lostsidewalk.buffy;
+package com.lostsidewalk.buffy.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
