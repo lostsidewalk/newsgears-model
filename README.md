@@ -17,9 +17,9 @@
     FeedGears RSS is a web-based RSS aggregator/reader platform.
     <br />
     <br />
-    <a href="https://github.com/lostsidewalkllc/newsgears-model/issues">Report Bug</a>
+    <a href="https://github.com/lostsidewalk/newsgears-model/issues">Report Bug</a>
     ·
-    <a href="https://github.com/lostsidewalkllc/newsgears-model/issues">Request Feature</a>
+    <a href="https://github.com/lostsidewalk/newsgears-model/issues">Request Feature</a>
   </p>
 </div>
 
@@ -72,7 +72,7 @@ This repository contains the basic Java data structures used throughout the appl
     <li>query</li> 
 </ul>
 
-For more information about FeedGears, see the parent project repository at: https://www.github.com/lostsidewalkllc/newsgears-app.
+For more information about FeedGears, see the parent project repository at: https://www.github.com/lostsidewalk/newsgears-app.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -145,7 +145,7 @@ Distributed under the GPL V3 License. See `LICENSE` for more information.
 
 meh - [@lostsidewalkllc](https://twitter.com/lostsidewalkllc) - meh@lostsidewalk.com
 
-Project Link: [https://github.com/lostsidewalkllc/newsgears-model](https://github.com/lostsidewalkllc/newsgears-model)
+Project Link: [https://github.com/lostsidewalk/newsgears-model](https://github.com/lostsidewalk/newsgears-model)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
