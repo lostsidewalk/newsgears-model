@@ -5,11 +5,17 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'java-library'
+apply plugin: 'signing'
+
+group = 'com.lostsidewalk.newsgears'
+version = '0.5'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(19)
     }
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -49,12 +55,61 @@ dependencies {
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            groupId = 'com.lostsidewalk.newsgears'
+        mavenJava(MavenPublication) {
             artifactId = 'newsgears-model'
-            version = '0.4'
-
             from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'newsgears-model'
+                description = 'This module contains the basic Java data structures used throughout the FeedGears RSS platform.'
+                url = 'https://www.lostsidewalk.com/dev/newsgears-model'
+                licenses {
+                    license {
+                        name = 'GNU General Public License'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'elderscrollsjesus'
+                        name = 'Michael Harris'
+                        email = 'meh@lostsidewalk.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/lostsidewalk/newsgears-model.git'
+                    developerConnection = 'scm:git:https://github.com/lostsidewalk/newsgears-model.git'
+                    url = 'https://www.lostsidewalk.com/dev/newsgears-model'
+                }
+            }
         }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/releases'
+            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }
