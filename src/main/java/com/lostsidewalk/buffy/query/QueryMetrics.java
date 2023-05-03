@@ -29,8 +29,11 @@ public class QueryMetrics implements Serializable {
     Integer redirectHttpStatusCode;
     String redirectHttpStatusMessage;
 
-    // timestamp
+    // import timestamp
     Date importTimestamp;
+
+    // import schedule
+    String importSchedule;
 
     // import ct
     Integer importCt;
@@ -50,7 +53,7 @@ public class QueryMetrics implements Serializable {
     // error details
     String errorDetail;
 
-    private QueryMetrics(Long queryId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, Integer importCt) {
+    private QueryMetrics(Long queryId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, String importSchedule, Integer importCt) {
         this.queryId = queryId;
         this.httpStatusCode = httpStatusCode;
         this.httpStatusMessage = httpStatusMessage;
@@ -58,17 +61,18 @@ public class QueryMetrics implements Serializable {
         this.redirectHttpStatusCode = redirectHttpStatusCode;
         this.redirectHttpStatusMessage = redirectHttpStatusMessage;
         this.importTimestamp = importTimestamp;
+        this.importSchedule = importSchedule;
         this.importCt = importCt;
     }
 
     @SuppressWarnings("unused")
-    public static QueryMetrics from(Long queryId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, Integer importCt) {
-        return new QueryMetrics(queryId, httpStatusCode, httpStatusMessage, redirectFeedUrl, redirectHttpStatusCode, redirectHttpStatusMessage, importTimestamp, importCt);
+    public static QueryMetrics from(Long queryId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, String importSchedule, Integer importCt) {
+        return new QueryMetrics(queryId, httpStatusCode, httpStatusMessage, redirectFeedUrl, redirectHttpStatusCode, redirectHttpStatusMessage, importTimestamp, importSchedule, importCt);
     }
 
     @SuppressWarnings("unused")
-    public static QueryMetrics from(Long queryId, Date importTimestamp, Integer importCt) {
-        return new QueryMetrics(queryId, null, null, null, null, null, importTimestamp, importCt);
+    public static QueryMetrics from(Long queryId, Date importTimestamp, String importSchedule, Integer importCt) {
+        return new QueryMetrics(queryId, null, null, null, null, null, importTimestamp, importSchedule, importCt);
     }
 
     //

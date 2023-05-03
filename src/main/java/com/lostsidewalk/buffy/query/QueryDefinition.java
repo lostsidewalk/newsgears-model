@@ -35,25 +35,28 @@ public class QueryDefinition implements Serializable {
     @NotBlank
     String queryType;
 
+    String importSchedule;
+
     private Serializable queryConfig;
 
-    private QueryDefinition(Long feedId, String username, String queryTitle, String queryImageUrl, String queryText, String queryType, Serializable queryConfig) {
+    private QueryDefinition(Long feedId, String username, String queryTitle, String queryImageUrl, String queryText, String queryType, String importSchedule, Serializable queryConfig) {
         this.feedId = feedId;
         this.username = username;
         this.queryTitle = queryTitle;
         this.queryImageUrl = queryImageUrl;
         this.queryText = queryText;
         this.queryType = queryType;
+        this.importSchedule = importSchedule;
         this.queryConfig = queryConfig;
     }
 
     @SuppressWarnings("unused")
-    public static QueryDefinition from(Long feedId, String username, String queryTitle, String queryText, String queryType, Serializable queryConfig) {
-        return new QueryDefinition(feedId, username, queryTitle, null, queryText, queryType, queryConfig);
+    public static QueryDefinition from(Long feedId, String username, String queryTitle, String queryText, String queryType, String importSchedule, Serializable queryConfig) {
+        return new QueryDefinition(feedId, username, queryTitle, null, queryText, queryType, importSchedule, queryConfig);
     }
 
     @SuppressWarnings("unused")
-    public static QueryDefinition from(Long feedId, String username, String queryTitle, String queryImageUrl, String queryText, String queryType, Serializable queryConfig) {
-        return new QueryDefinition(feedId, username, queryTitle, queryImageUrl, queryText, queryType, queryConfig);
+    public static QueryDefinition from(Long feedId, String username, String queryTitle, String queryImageUrl, String queryText, String queryType, String importSchedule, Serializable queryConfig) {
+        return new QueryDefinition(feedId, username, queryTitle, queryImageUrl, queryText, queryType, importSchedule, queryConfig);
     }
 }
