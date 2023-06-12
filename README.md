@@ -66,11 +66,11 @@ This repository contains the basic Java data structures used throughout the appl
     <li>auth</li>
     <li>customer</li>
     <li>discovery</li>
-    <li>feed</li>
+    <li>queue</li>
     <li>importer</li>
     <li>post</li>
     <li>publisher</li>
-    <li>query</li> 
+    <li>subscription</li> 
 </ul>
 
 For more information about FeedGears, see the parent project repository at: https://www.github.com/lostsidewalk/newsgears-app.

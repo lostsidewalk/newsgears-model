@@ -2,7 +2,7 @@ package com.lostsidewalk.buffy.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.lostsidewalk.buffy.query.QueryDefinition;
+import com.lostsidewalk.buffy.subscription.SubscriptionDefinition;
 import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -64,12 +64,12 @@ public class StagingPost implements Serializable {
     private final String importerId;
 
     @NotNull
-    private final Long feedId;
+    private final Long queueId;
 
     private final String importerDesc;
 
     @NotNull
-    private final Long queryId;
+    private final Long subscriptionId;
 
     @NotNull
     private final ContentObject postTitle;
@@ -90,7 +90,7 @@ public class StagingPost implements Serializable {
     private final List<PostUrl> postUrls;
 
     @JsonIgnore
-    private final String postImgUrl; // TODO: rename this to 'postImageUrl'
+    private final String postImgUrl;
 
     @JsonIgnore
     private final String postImgTransportIdent;
@@ -136,9 +136,9 @@ public class StagingPost implements Serializable {
     private PostReadStatus postReadStatus;
 
     StagingPost(String importerId,
-                Long feedId,
+                Long queueId,
                 String importerDesc,
-                Long queryId,
+                Long subscriptionId,
                 ContentObject postTitle,
                 ContentObject postDesc,
                 List<ContentObject> postContents,
@@ -162,9 +162,9 @@ public class StagingPost implements Serializable {
                 Date lastUpdatedTimestamp
     ) {
         this.importerId = importerId;
-        this.feedId = feedId;
+        this.queueId = queueId;
         this.importerDesc = trimToLength(IMPORTER_DESC_FIELD_NAME, importerDesc, 512); // 512
-        this.queryId = queryId;
+        this.subscriptionId = subscriptionId;
         this.postTitle = postTitle;
         this.postDesc = postDesc;
         this.postContents = postContents;
@@ -205,9 +205,9 @@ public class StagingPost implements Serializable {
     public static StagingPost from(
             // Long id,
             String importerId,
-            Long feedId,
+            Long queueId,
             String importerDesc,
-            Long queryId,
+            Long subscriptionId,
             ContentObject postTitle,
             ContentObject postDesc,
             List<ContentObject> postContents,
@@ -232,9 +232,9 @@ public class StagingPost implements Serializable {
     {
         return new StagingPost(
                 importerId,
-                feedId,
+                queueId,
                 importerDesc,
-                queryId,
+                subscriptionId,
                 postTitle,
                 postDesc,
                 postContents,
@@ -264,9 +264,9 @@ public class StagingPost implements Serializable {
     @SuppressWarnings("unused")
     public static StagingPost from(
             String importerId,
-            Long feedId,
+            Long queueId,
             String importerDesc,
-            Long queryId,
+            Long subscriptionId,
             ContentObject postTitle,
             ContentObject postDesc,
             List<ContentObject> postContents,
@@ -292,9 +292,9 @@ public class StagingPost implements Serializable {
         String postImgTransportIdent = getPostImgUrlHash(postImgUrl);
         return new StagingPost(
                 importerId,
-                feedId,
+                queueId,
                 importerDesc,
-                queryId,
+                subscriptionId,
                 postTitle,
                 postDesc,
                 postContents,
@@ -319,12 +319,12 @@ public class StagingPost implements Serializable {
         );
     }
 
-    public static StagingPost from(StagingPost copy, QueryDefinition queryDefinition, String postHash) {
+    public static StagingPost from(StagingPost copy, SubscriptionDefinition subscriptionDefinition, String postHash) {
         return new StagingPost(
                 copy.importerId,
-                queryDefinition.getFeedId(),
-                trimToEmpty(defaultString(queryDefinition.getQueryTitle(), queryDefinition.getQueryText())),
-                queryDefinition.getId(),
+                subscriptionDefinition.getQueueId(),
+                trimToEmpty(defaultString(subscriptionDefinition.getTitle(), subscriptionDefinition.getUrl())),
+                subscriptionDefinition.getId(),
                 copy.postTitle,
                 copy.postDesc,
                 copy.postContents,
@@ -336,7 +336,7 @@ public class StagingPost implements Serializable {
                 copy.postImgTransportIdent,
                 copy.importTimestamp,
                 postHash,
-                queryDefinition.getUsername(),
+                subscriptionDefinition.getUsername(),
                 copy.postComment,
                 copy.postRights,
                 copy.contributors,

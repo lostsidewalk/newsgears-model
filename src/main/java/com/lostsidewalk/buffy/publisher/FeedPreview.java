@@ -7,17 +7,17 @@ import java.io.Serializable;
 @Data
 public class FeedPreview {
 
-    Long feedId;
+    Long queueId;
 
     Serializable previewArtifact;
 
-    private FeedPreview(Long feedId, Serializable previewArtifact) {
-        this.feedId = feedId;
+    private FeedPreview(Long queueId, Serializable previewArtifact) {
+        this.queueId = queueId;
         this.previewArtifact = previewArtifact;
     }
 
     @SuppressWarnings("unused")
-    public static FeedPreview from(Long feedId, Serializable previewArtifact) {
-        return new FeedPreview(feedId, previewArtifact);
+    public static FeedPreview from(Long queueId, Serializable previewArtifact) {
+        return new FeedPreview(queueId, previewArtifact);
     }
 }

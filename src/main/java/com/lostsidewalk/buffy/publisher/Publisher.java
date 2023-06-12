@@ -1,6 +1,6 @@
 package com.lostsidewalk.buffy.publisher;
 
-import com.lostsidewalk.buffy.feed.FeedDefinition;
+import com.lostsidewalk.buffy.queue.QueueDefinition;
 import com.lostsidewalk.buffy.post.StagingPost;
 import lombok.Data;
 
@@ -42,7 +42,7 @@ public interface Publisher {
         }
     }
 
-    PubResult publishFeed(FeedDefinition feedDefinition, List<StagingPost> posts, Date pubDate);
+    PubResult publishFeed(QueueDefinition queueDefinition, List<StagingPost> posts, Date pubDate);
 
     String getPublisherId();
 

@@ -9,7 +9,7 @@ public enum  AuthProvider {
     GOOGLE("google"),
     GITHUB("github");
 
-    public final String registrationId;
+    final String registrationId;
 
     AuthProvider(String registrationId) {
         this.registrationId = registrationId;

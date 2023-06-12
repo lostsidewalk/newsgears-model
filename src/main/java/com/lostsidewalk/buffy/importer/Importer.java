@@ -2,8 +2,8 @@ package com.lostsidewalk.buffy.importer;
 
 import com.lostsidewalk.buffy.discovery.FeedDiscoveryInfo;
 import com.lostsidewalk.buffy.post.StagingPost;
-import com.lostsidewalk.buffy.query.QueryDefinition;
-import com.lostsidewalk.buffy.query.QueryMetrics;
+import com.lostsidewalk.buffy.subscription.SubscriptionDefinition;
+import com.lostsidewalk.buffy.subscription.SubscriptionMetrics;
 import lombok.Data;
 
 import java.util.List;
@@ -18,19 +18,19 @@ public interface Importer {
 
         Set<StagingPost> importSet;
 
-        List<QueryMetrics> queryMetrics;
+        List<SubscriptionMetrics> subscriptionMetrics;
 
-        private ImportResult(Set<StagingPost> importSet, List<QueryMetrics> queryMetrics) {
+        private ImportResult(Set<StagingPost> importSet, List<SubscriptionMetrics> subscriptionMetrics) {
             this.importSet = importSet;
-            this.queryMetrics = queryMetrics;
+            this.subscriptionMetrics = subscriptionMetrics;
         }
 
-        public static ImportResult from(Set<StagingPost> importSet, List<QueryMetrics> queryMetrics) {
-            return new ImportResult(importSet, queryMetrics);
+        public static ImportResult from(Set<StagingPost> importSet, List<SubscriptionMetrics> subscriptionMetrics) {
+            return new ImportResult(importSet, subscriptionMetrics);
         }
     }
 
-    ImportResult doImport(List<QueryDefinition> queryDefinitions, Map<String, FeedDiscoveryInfo> discoveryCache);
+    ImportResult doImport(List<SubscriptionDefinition> subscriptionDefinitions, Map<String, FeedDiscoveryInfo> discoveryCache);
 
     interface ImportResponseCallback {
         ImportResult onSuccess(Set<StagingPost> stagingPosts);

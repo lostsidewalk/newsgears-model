@@ -1,4 +1,4 @@
-package com.lostsidewalk.buffy.query;
+package com.lostsidewalk.buffy.subscription;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -12,7 +12,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 @Data
 @JsonInclude(NON_EMPTY)
-public class QueryMetrics implements Serializable {
+public class SubscriptionMetrics implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 298231123323L;
@@ -20,7 +20,7 @@ public class QueryMetrics implements Serializable {
     Long id;
 
     @NotBlank
-    Long queryId;
+    Long subscriptionId;
 
     // HTTP results
     Integer httpStatusCode;
@@ -53,8 +53,8 @@ public class QueryMetrics implements Serializable {
     // error details
     String errorDetail;
 
-    private QueryMetrics(Long queryId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, String importSchedule, Integer importCt) {
-        this.queryId = queryId;
+    private SubscriptionMetrics(Long subscriptionId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, String importSchedule, Integer importCt) {
+        this.subscriptionId = subscriptionId;
         this.httpStatusCode = httpStatusCode;
         this.httpStatusMessage = httpStatusMessage;
         this.redirectFeedUrl = redirectFeedUrl;
@@ -66,13 +66,13 @@ public class QueryMetrics implements Serializable {
     }
 
     @SuppressWarnings("unused")
-    public static QueryMetrics from(Long queryId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, String importSchedule, Integer importCt) {
-        return new QueryMetrics(queryId, httpStatusCode, httpStatusMessage, redirectFeedUrl, redirectHttpStatusCode, redirectHttpStatusMessage, importTimestamp, importSchedule, importCt);
+    public static SubscriptionMetrics from(Long subscriptionId, Integer httpStatusCode, String httpStatusMessage, String redirectFeedUrl, Integer redirectHttpStatusCode, String redirectHttpStatusMessage, Date importTimestamp, String importSchedule, Integer importCt) {
+        return new SubscriptionMetrics(subscriptionId, httpStatusCode, httpStatusMessage, redirectFeedUrl, redirectHttpStatusCode, redirectHttpStatusMessage, importTimestamp, importSchedule, importCt);
     }
 
     @SuppressWarnings("unused")
-    public static QueryMetrics from(Long queryId, Date importTimestamp, String importSchedule, Integer importCt) {
-        return new QueryMetrics(queryId, null, null, null, null, null, importTimestamp, importSchedule, importCt);
+    public static SubscriptionMetrics from(Long subscriptionId, Date importTimestamp, String importSchedule, Integer importCt) {
+        return new SubscriptionMetrics(subscriptionId, null, null, null, null, null, importTimestamp, importSchedule, importCt);
     }
 
     //

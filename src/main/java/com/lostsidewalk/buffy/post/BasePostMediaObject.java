@@ -10,7 +10,7 @@ import static java.lang.reflect.Array.newInstance;
 abstract class BasePostMediaObject {
 
     @SuppressWarnings("unchecked")
-    public <T, F> T[] convertArray(Supplier<List<F>> fromSupplier, Function<F, T> fn, Class<T> c) {
+    <T, F> T[] convertArray(Supplier<List<F>> fromSupplier, Function<F, T> fn, Class<T> c) {
         List<F> fromList = fromSupplier.get();
         List<T> toList = new ArrayList<>();
         for (F from : fromList) {
