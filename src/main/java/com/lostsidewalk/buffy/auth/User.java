@@ -1,6 +1,5 @@
 package com.lostsidewalk.buffy.auth;
 
-import com.lostsidewalk.buffy.auth.AuthProvider;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
