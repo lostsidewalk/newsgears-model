@@ -9,6 +9,9 @@ import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
+/**
+ * Represents the status of a media associated with a post.
+ */
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaStatus implements Serializable {
@@ -16,24 +19,47 @@ public class PostMediaStatus implements Serializable {
     @Serial
     private static final long serialVersionUID = 23549342344343412L;
 
-    private String reason;
+    /**
+     * The reason for the status.
+     */
+    String reason;
 
-    private Status.State state;
+    /**
+     * The state of the status.
+     */
+    Status.State state;
 
+    /**
+     * Constructor to create a PostMediaStatus object.
+     *
+     * @param reason The reason for the status.
+     * @param state  The state of the status.
+     */
     PostMediaStatus(String reason, Status.State state) {
         this.reason = reason;
         this.state = state;
     }
 
-    public static PostMediaStatus from(Status t) {
-        return new PostMediaStatus(t.getReason(), t.getState());
+    /**
+     * Creates a PostMediaStatus object from a Status instance.
+     *
+     * @param status The Status instance to convert from.
+     * @return A PostMediaStatus object with data from the Status instance.
+     */
+    public static PostMediaStatus from(Status status) {
+        return new PostMediaStatus(status.getReason(), status.getState());
     }
 
+    /**
+     * Converts the PostMediaStatus object to a Status instance.
+     *
+     * @return A Status instance representing the PostMediaStatus data.
+     */
     public Status toModule() {
-        Status s = new Status();
-        s.setReason(reason);
-        s.setState(state);
+        Status status = new Status();
+        status.setReason(reason);
+        status.setState(state);
 
-        return s;
+        return status;
     }
 }

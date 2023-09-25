@@ -6,24 +6,27 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a configuration for the framework, including user-specific settings for notifications and display.
+ */
 @SuppressWarnings("unused")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class FrameworkConfig {
 
+    /**
+     * The key for the username field in the configuration.
+     */
     public static final String USERNAME = "username";
-
-    Long userId;
-    //
-    // notifications
-    //
+    /**
+     * The key for the notifications configuration in the framework settings.
+     */
     public static final String NOTIFICATION_CONFIG = "notifications";
-
-    Map<String, String> notifications = new HashMap<>();
-    //
-    // display
-    //
+    /**
+     * The key for the display configuration in the framework settings.
+     */
     public static final String DISPLAY_CONFIG = "display";
-
+    Long userId;
+    Map<String, String> notifications = new HashMap<>();
     Map<String, String> display = new HashMap<>();
 }

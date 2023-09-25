@@ -7,6 +7,7 @@ import com.rometools.modules.mediarss.types.MediaContent;
 import com.rometools.modules.mediarss.types.MediaGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,20 +18,40 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Represents media information associated with a post.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(NON_EMPTY)
+@NoArgsConstructor
 public class PostMedia extends BasePostMediaObject implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 983403122303L;
 
-    private final PostMediaMetadata postMediaMetadata;
+    /**
+     * Metadata associated with the media content of the post.
+     */
+    PostMediaMetadata postMediaMetadata;
 
-    private final List<PostMediaGroup> postMediaGroups;
+    /**
+     * List of media groups associated with the post.
+     */
+    List<PostMediaGroup> postMediaGroups;
 
-    private final List<PostMediaContent> postMediaContents;
+    /**
+     * List of media contents associated with the post.
+     */
+    List<PostMediaContent> postMediaContents;
 
+    /**
+     * Private constructor for creating a PostMedia object.
+     *
+     * @param postMediaMetadata Metadata associated with the media content.
+     * @param postMediaGroups   List of media groups associated with the post.
+     * @param postMediaContents List of media contents associated with the post.
+     */
     PostMedia(PostMediaMetadata postMediaMetadata, List<PostMediaGroup> postMediaGroups, List<PostMediaContent> postMediaContents) {
         super();
         this.postMediaMetadata = postMediaMetadata;
@@ -38,6 +59,12 @@ public class PostMedia extends BasePostMediaObject implements Serializable {
         this.postMediaContents = postMediaContents;
     }
 
+    /**
+     * Static factory method to create a PostMedia object from a MediaEntryModule instance.
+     *
+     * @param mm The MediaEntryModule instance to convert to a PostMedia object.
+     * @return A new PostMedia object created from the given MediaEntryModule instance.
+     */
     public static PostMedia from(MediaEntryModule mm) {
         // media module top-level metadata
         PostMediaMetadata postMediaMetadata = PostMediaMetadata.from(mm.getMetadata());
@@ -49,6 +76,11 @@ public class PostMedia extends BasePostMediaObject implements Serializable {
         return new PostMedia(postMediaMetadata, postMediaGroups, postMediaContents);
     }
 
+    /**
+     * Converts the PostMedia object to a MediaEntryModule instance.
+     *
+     * @return A MediaEntryModule instance representing the PostMedia object.
+     */
     @SuppressWarnings({"unused"})
     public MediaEntryModule toModule() {
         MediaEntryModuleImpl mm = new MediaEntryModuleImpl();

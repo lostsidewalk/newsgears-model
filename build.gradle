@@ -8,7 +8,7 @@ apply plugin: 'java-library'
 apply plugin: 'signing'
 
 group = 'com.lostsidewalk.newsgears'
-version = '0.5.2'
+version = '0.5.3'
 
 java {
     toolchain {
@@ -16,6 +16,12 @@ java {
     }
     withJavadocJar()
     withSourcesJar()
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
 }
 
 repositories {
@@ -29,7 +35,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.5'
 
     // validation-api
-    implementation 'javax.validation:validation-api:2.0.1.Final'
+    api 'javax.validation:validation-api:2.0.1.Final'
 
     // jackson-annotation
     api 'com.fasterxml.jackson.core:jackson-annotations:2.15.1'
@@ -40,17 +46,20 @@ dependencies {
     // commons-collections4
     implementation 'org.apache.commons:commons-collections4:4.4'
     // jaxb-api
-    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    api 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
     // rome
-    implementation 'com.rometools:rome-opml:2.1.0'
+    api 'com.rometools:rome-opml:2.1.0'
     // rome-modules
-    implementation 'com.rometools:rome-modules:2.1.0'
-
+    api 'com.rometools:rome-modules:2.1.0'
+99
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
     testCompileOnly 'org.projectlombok:lombok:1.18.26'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+    annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
+    implementation 'com.github.therapi:therapi-runtime-javadoc:0.15.0'
 }
 
 publishing {
@@ -106,10 +115,4 @@ publishing {
 
 signing {
     sign publishing.publications.mavenJava
-}
-
-javadoc {
-    if(JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
-    }
 }

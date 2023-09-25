@@ -1,6 +1,7 @@
 package com.lostsidewalk.buffy.queue;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lostsidewalk.buffy.Auditable;
 import lombok.Data;
 import lombok.Setter;
 
@@ -19,60 +20,114 @@ import static lombok.AccessLevel.PUBLIC;
 import static org.apache.commons.lang3.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+/**
+ * Represents a definition for a feed queue.
+ */
 @Data
 @JsonInclude(NON_EMPTY)
-public class QueueDefinition implements Serializable {
+public class QueueDefinition implements Serializable, Auditable {
 
     @Serial
     private static final long serialVersionUID = 294234688900249823L;
-
-    @SuppressWarnings("unused")
-    public enum QueueStatus {
-        ENABLED, DISABLED
-    }
-
-    private Long id;
-
+    /**
+     * The unique identifier of the queue.
+     */
+    Long id;
+    /**
+     * The identifier of the queue.
+     */
     @NotBlank
-    private String ident;
-
+    String ident;
+    /**
+     * The title of the queue.
+     */
+    String title;
+    /**
+     * The description of the queue.
+     */
+    String description;
+    /**
+     * The generator information of the queue.
+     */
+    String generator;
+    /**
+     * The transport identifier of the queue.
+     */
     @NotBlank
-    private String title;
-
-    private String description;
-
-    private String generator;
-
+    String transportIdent;
+    /**
+     * The username associated with the queue.
+     */
     @NotBlank
-    private String transportIdent;
-
-    @NotBlank
-    private String username;
-
+    String username;
+    /**
+     * The status of the queue (enabled or disabled).
+     */
     @Setter(PUBLIC)
     @NotNull
-    private QueueStatus queueStatus;
-
-    private Serializable exportConfig;
-
-    private String copyright;
-
+    QueueStatus queueStatus;
+    /**
+     * The configuration for exporting the queue.
+     */
+    Serializable exportConfig;
+    /**
+     * The copyright information of the queue.
+     */
+    String copyright;
+    /**
+     * The language of the queue.
+     */
     @NotBlank
-    private String language;
+    String language;
+    /**
+     * The image source of the queue.
+     */
+    String queueImgSrc;
+    /**
+     * The hash of the image source for the queue's image.
+     */
+    String queueImgTransportIdent;
+    /**
+     * The timestamp when the queue was last deployed.
+     */
+    Date lastDeployed;
+    /**
+     * Whether authentication is required for the queue.
+     */
+    Boolean isAuthenticated;
+    /**
+     * The timestamp the queue was created.
+     */
+    Date created;
+    /**
+     * The timestamp the queue was last modified in any way.
+     */
+    Date lastModified;
 
-    private String queueImgSrc;
-
-    private String queueImgTransportIdent;
-
-    private Date lastDeployed;
-
-    private Boolean isAuthenticated;
-
+    /**
+     * Creates a new QueueDefinition with the specified properties.
+     *
+     * @param ident                  The unique identifier of the queue definition.
+     * @param title                  The title of the queue.
+     * @param description            The description of the queue.
+     * @param generator              The generator associated with the queue.
+     * @param transportIdent         The transport identifier of the queue.
+     * @param username               The username associated with the queue.
+     * @param queueStatus            The status of the queue.
+     * @param exportConfig           The configuration for exporting data from the queue.
+     * @param copyright              The copyright information for the queue.
+     * @param language               The language of the queue.
+     * @param queueImgSrc            The source of the queue's image.
+     * @param queueImgTransportIdent The transport identifier of the queue's image.
+     * @param lastDeployed           The timestamp when the queue was last deployed.
+     * @param isAuthenticated        Indicates whether the queue requires authentication.
+     * @param created                The timestamp when the queue was created.
+     * @param lastModified           The timestamp when the queue was last modified.
+     */
     QueueDefinition(String ident, String title, String description, String generator, String transportIdent,
                     String username, QueueStatus queueStatus, Serializable exportConfig, String copyright,
                     String language, String queueImgSrc, String queueImgTransportIdent, Date lastDeployed,
-                    Boolean isAuthenticated)
-    {
+                    Boolean isAuthenticated, Date created, Date lastModified) {
         this.ident = ident;
         this.title = title;
         this.description = description;
@@ -87,10 +142,32 @@ public class QueueDefinition implements Serializable {
         this.queueImgTransportIdent = queueImgTransportIdent;
         this.lastDeployed = lastDeployed;
         this.isAuthenticated = isAuthenticated;
+        this.created = created;
+        this.lastModified = lastModified;
     }
 
-    @SuppressWarnings("unused")
-    static QueueDefinition from(
+    /**
+     * Static factory method to create a QueueDefinition object with explicit status.
+     *
+     * @param ident                  The unique identifier of the queue definition.
+     * @param title                  The title of the queue.
+     * @param description            The description of the queue.
+     * @param generator              The generator associated with the queue.
+     * @param transportIdent         The transport identifier of the queue.
+     * @param username               The username associated with the queue.
+     * @param queueStatus            The status of the queue.
+     * @param exportConfig           The configuration for exporting data from the queue.
+     * @param copyright              The copyright information for the queue.
+     * @param language               The language of the queue.
+     * @param queueImgSrc            The source of the queue's image.
+     * @param queueImgTransportIdent The transport identifier of the queue's image.
+     * @param lastDeployed           The timestamp when the queue was last deployed.
+     * @param isAuthenticated        Indicates whether the queue requires authentication.
+     * @param created                The timestamp when the queue was created.
+     * @param lastModified           The timestamp when the queue was last modified.
+     * @return A new QueueDefinition instance.
+     */
+    public static QueueDefinition from(
             String ident,
             String title,
             String description,
@@ -104,8 +181,9 @@ public class QueueDefinition implements Serializable {
             String queueImgSrc,
             String queueImgTransportIdent,
             Date lastDeployed,
-            Boolean isAuthenticated)
-    {
+            Boolean isAuthenticated,
+            Date created,
+            Date lastModified) {
         return new QueueDefinition(
                 ident,
                 title,
@@ -120,10 +198,27 @@ public class QueueDefinition implements Serializable {
                 queueImgSrc,
                 queueImgTransportIdent,
                 lastDeployed,
-                isAuthenticated);
+                isAuthenticated,
+                created,
+                lastModified);
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Static factory method to create a QueueDefinition object with default status.
+     *
+     * @param ident           The unique identifier of the queue definition.
+     * @param title           The title of the queue.
+     * @param description     The description of the queue.
+     * @param generator       The generator associated with the queue.
+     * @param transportIdent  The transport identifier of the queue.
+     * @param username        The username associated with the queue.
+     * @param exportConfig    The configuration for exporting data from the queue.
+     * @param copyright       The copyright information for the queue.
+     * @param language        The language of the queue.
+     * @param queueImgSrc     The source of the queue's image.
+     * @param isAuthenticated Indicates whether the queue requires authentication.
+     * @return A new QueueDefinition instance with default status.
+     */
     public static QueueDefinition from(
             String ident,
             String title,
@@ -135,8 +230,7 @@ public class QueueDefinition implements Serializable {
             String copyright,
             String language,
             String queueImgSrc,
-            Boolean isAuthenticated)
-    {
+            Boolean isAuthenticated) {
         String queueImgTransportIdent = getImgSrcHash(queueImgSrc);
         return new QueueDefinition(
                 ident,
@@ -152,9 +246,17 @@ public class QueueDefinition implements Serializable {
                 queueImgSrc,
                 queueImgTransportIdent,
                 null,
-                isAuthenticated);
+                isAuthenticated,
+                new Date(),
+                null);
     }
 
+    /**
+     * Computes the MD5 hash of an image source.
+     *
+     * @param imageSrc The image source to compute the hash for.
+     * @return The MD5 hash of the image source.
+     */
     private static String getImgSrcHash(String imageSrc) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -166,7 +268,30 @@ public class QueueDefinition implements Serializable {
         return null;
     }
 
+    /**
+     * Computes the hash of an image source using the provided MessageDigest.
+     *
+     * @param md       The MessageDigest instance to use.
+     * @param imageSrc The image source to compute the hash for.
+     * @return The computed hash of the image source.
+     */
     static String computeImageHash(MessageDigest md, String imageSrc) {
         return isNotEmpty(imageSrc) ? printHexBinary(md.digest(serialize(imageSrc))) : null;
+    }
+
+    /**
+     * Possible statuses of the feed queue.
+     */
+    public enum QueueStatus {
+        /**
+         * The queue is enabled.
+         */
+        ENABLED,
+
+        /**
+         * The queue is disabled.
+         */
+        @SuppressWarnings("unused")
+        DISABLED
     }
 }

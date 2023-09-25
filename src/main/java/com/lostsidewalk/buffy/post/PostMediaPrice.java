@@ -13,6 +13,9 @@ import java.util.Currency;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
+/**
+ * Represents a price associated with media in a post.
+ */
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaPrice implements Serializable {
@@ -20,14 +23,34 @@ public class PostMediaPrice implements Serializable {
     @Serial
     private static final long serialVersionUID = 23412156442343L;
 
-    private Type type;
+    /**
+     * Type of the price.
+     */
+    Type type;
 
-    private BigDecimal price;
+    /**
+     * Price value.
+     */
+    BigDecimal price;
 
-    private Currency currency;
+    /**
+     * Currency of the price.
+     */
+    Currency currency;
 
-    private URL info;
+    /**
+     * URL with more information about the price.
+     */
+    URL info;
 
+    /**
+     * Creates a new instance of PostMediaPrice.
+     *
+     * @param type     Type of the price.
+     * @param price    Price value.
+     * @param currency Currency of the price.
+     * @param info     URL with more information about the price.
+     */
     PostMediaPrice(Type type, BigDecimal price, Currency currency, URL info) {
         this.type = type;
         this.price = price;
@@ -35,10 +58,21 @@ public class PostMediaPrice implements Serializable {
         this.info = info;
     }
 
+    /**
+     * Creates a new instance of PostMediaPrice from a Price object.
+     *
+     * @param t The Price object to convert.
+     * @return A new PostMediaPrice instance.
+     */
     public static PostMediaPrice from(Price t) {
         return new PostMediaPrice(t.getType(), t.getPrice(), t.getCurrency(), t.getInfo());
     }
 
+    /**
+     * Converts the PostMediaPrice instance to a Price object.
+     *
+     * @return A Price object.
+     */
     public Price toModule() {
         Price p = new Price();
         p.setType(type);

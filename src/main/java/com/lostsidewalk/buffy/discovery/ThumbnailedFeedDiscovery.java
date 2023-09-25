@@ -9,40 +9,158 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The ThumbnailedFeedDiscovery class represents a feed discovery with additional thumbnail-related information.
+ */
 @Data
 public class ThumbnailedFeedDiscovery implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 112341230982130984L;
 
+    /**
+     * The unique identifier for the thumbnailed feed discovery.
+     */
     Long id;
+
+    /**
+     * The URL of the feed.
+     */
     String feedUrl;
+
+    /**
+     * The HTTP status code received when accessing the feed URL.
+     */
     Integer httpStatusCode;
+
+    /**
+     * The HTTP status message associated with the response from the feed URL.
+     */
     String httpStatusMessage;
+
+    /**
+     * The URL to which the feed URL was redirected, if applicable.
+     */
     String redirectFeedUrl;
+
+    /**
+     * The HTTP status code received after redirection during import.
+     */
     Integer redirectHttpStatusCode;
+
+    /**
+     * The HTTP status message received after redirection during import.
+     */
     String redirectHttpStatusMessage;
+
+    /**
+     * The title of the feed.
+     */
     ContentObject title;
+
+    /**
+     * The description of the feed.
+     */
     ContentObject description;
+
+    /**
+     * The type of the feed (e.g., RSS, Atom).
+     */
     String feedType;
+
+    /**
+     * The author of the feed.
+     */
     String author;
+
+    /**
+     * The copyright information of the feed.
+     */
     String copyright;
+
+    /**
+     * The documentation URL for the feed format.
+     */
     String docs;
+
+    /**
+     * The character encoding used by the feed.
+     */
     String encoding;
+
+    /**
+     * The feed generator information.
+     */
     String generator;
+
+    /**
+     * The feed's image information.
+     */
     FeedDiscoveryImageInfo image;
+
+    /**
+     * The feed's icon information.
+     */
     FeedDiscoveryImageInfo icon;
+
+    /**
+     * The language of the feed.
+     */
     String language;
+
+    /**
+     * The link associated with the feed.
+     */
     String link;
+
+    /**
+     * The managing editor of the feed.
+     */
     String managingEditor;
+
+    /**
+     * The published date of the feed.
+     */
     Date publishedDate;
+
+    /**
+     * The feed's stylesheet information.
+     */
     String styleSheet;
+
+    /**
+     * A list of supported content types in the feed.
+     */
     List<String> supportedTypes;
+
+    /**
+     * The webmaster of the feed.
+     */
     String webMaster;
+
+    /**
+     * The URI associated with the feed.
+     */
     String uri;
+
+    /**
+     * The categories associated with the feed.
+     */
     List<String> categories;
+
+    /**
+     * A list of sample entries from the feed.
+     */
     List<StagingPost> sampleEntries;
+
+    /**
+     * Indicates whether the feed URL is upgradable (can be redirected to a more secure URL).
+     */
     boolean isUrlUpgradable;
+
+    /**
+     * The feed recommendation information associated with the thumbnailed feed discovery.
+     */
     FeedRecommendationInfo feedRecommendationInfo;
 
     ThumbnailedFeedDiscovery(
@@ -106,6 +224,15 @@ public class ThumbnailedFeedDiscovery implements Serializable {
         this.feedRecommendationInfo = feedRecommendationInfo;
     }
 
+    /**
+     * Creates a ThumbnailedFeedDiscovery object from the provided feed discovery information, feed image, feed icon, and feed recommendation information.
+     *
+     * @param feedDiscoveryInfo      The feed discovery information.
+     * @param feedImage              The feed image information.
+     * @param feedIcon               The feed icon information.
+     * @param feedRecommendationInfo The feed recommendation information.
+     * @return A ThumbnailedFeedDiscovery object.
+     */
     public static ThumbnailedFeedDiscovery from(FeedDiscoveryInfo feedDiscoveryInfo,
                                                 FeedDiscoveryImageInfo feedImage,
                                                 FeedDiscoveryImageInfo feedIcon,

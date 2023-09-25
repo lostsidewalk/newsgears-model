@@ -2,6 +2,7 @@ package com.lostsidewalk.buffy.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lostsidewalk.buffy.Auditable;
 import com.lostsidewalk.buffy.subscription.SubscriptionDefinition;
 import lombok.Data;
 import lombok.Setter;
@@ -24,117 +25,228 @@ import static lombok.AccessLevel.PUBLIC;
 import static org.apache.commons.lang3.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.*;
 
+/**
+ * Represents a staging post entity that holds information about a post being prepared for publication.
+ * This class defines various attributes related to the post's content, metadata, and status.
+ */
 @Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
-public class StagingPost implements Serializable {
+public class StagingPost implements Serializable, Auditable {
 
+    /**
+     * A special constant instance of StagingPost representing the end of an import.
+     */
+    public static final StagingPost END_IMPORT = new StagingPost(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+    );
     @Serial
     private static final long serialVersionUID = 295664561249823L;
-
     private static final String IMPORTER_DESC_FIELD_NAME = "importerDesc";
-
     private static final String POST_TITLE_FIELD_NAME = "postTitle";
-
     private static final String POST_DESC_FIELD_NAME = "postDesc";
-
     private static final String POST_URL_FIELD_NAME = "postUrl";
-
     private static final String POST_IMG_URL_FIELD_NAME = "postImgUrl";
-
     private static final String POST_COMMENT_FIELD_NAME = "postComment";
-
     private static final String POST_RIGHTS_FIELD_NAME = "postRights";
-
     private static final String ENCLOSURE_URL_FIELD_NAME = "enclosureUrl";
-
-    @SuppressWarnings("unused")
-    public enum PostPubStatus {
-        PUB_PENDING, DEPUB_PENDING, ARCHIVED, PURGE_PENDING
-    }
-
-    @SuppressWarnings("unused")
-    public enum PostReadStatus {
-        UNREAD, READ, READ_LATER
-    }
-
-    private Long id;
-
+    /**
+     * The unique identifier of the staging post.
+     */
+    Long id;
+    /**
+     * The identifier of the importer associated with this post.
+     */
     @NotBlank
-    private final String importerId;
-
+    String importerId;
+    /**
+     * The ID of the queue to which the post belongs.
+     */
     @NotNull
-    private final Long queueId;
-
-    private final String importerDesc;
-
+    Long queueId;
+    /**
+     * A description of the importer.
+     */
+    String importerDesc;
+    /**
+     * The ID of the subscription associated with this post.
+     */
+    Long subscriptionId;
+    /**
+     * The title of the post.
+     */
     @NotNull
-    private final Long subscriptionId;
-
-    @NotNull
-    private final ContentObject postTitle;
-
+    ContentObject postTitle;
+    /**
+     * The description of the post.
+     */
     @NotNull
     @Setter(PACKAGE)
-    private ContentObject postDesc;
-
-    private List<ContentObject> postContents;
-
-    private PostMedia postMedia;
-
-    private PostITunes postITunes;
-
-    @NotBlank
-    private final String postUrl;
-
-    private final List<PostUrl> postUrls;
-
+    ContentObject postDesc;
+    /**
+     * A list of ContentObject objects (the post content)
+     */
+    List<ContentObject> postContents;
+    /**
+     * The post media descriptor
+     */
+    PostMedia postMedia;
+    /**
+     * The post ITunes descriptor
+     */
+    PostITunes postITunes;
+    /**
+     * The (primary) post URL
+     */
+    String postUrl;
+    /**
+     * A list of alternate post URLs
+     */
+    List<PostUrl> postUrls;
+    /**
+     * The URL of the post thumbnail image
+     */
     @JsonIgnore
-    private final String postImgUrl;
-
+    String postImgUrl;
+    /**
+     * The post image transport identifier
+     */
     @JsonIgnore
-    private final String postImgTransportIdent;
-
+    String postImgTransportIdent;
+    /**
+     * The timestamp of when the post was imported.
+     */
     @NotNull
-    private final Date importTimestamp;
-
+    Date importTimestamp;
+    /**
+     * The hash of the post content.
+     */
     @NotBlank
     @JsonIgnore
-    private final String postHash;
-
+    String postHash;
+    /**
+     * The username associated with the post.
+     */
     @NotBlank
     @JsonIgnore
-    private final String username;
-
-    private final String postComment;
-
-    private final String postRights;
-
-    private final List<PostPerson> contributors;
-
-    private final List<PostPerson> authors;
-
-    private final List<String> postCategories;
-
-    private final Date publishTimestamp;
-
-    private final Date expirationTimestamp;
-
-    private final List<PostEnclosure> enclosures;
-
-    private final Date lastUpdatedTimestamp;
-    //
-    // Note: the following fields are not in any c'tor
-    //
+    String username;
+    /**
+     * The comment associated with the post.
+     */
+    String postComment;
+    /**
+     * The rights associated with the post.
+     */
+    String postRights;
+    /**
+     * The list of contributors to the post.
+     */
+    List<PostPerson> contributors;
+    /**
+     * The list of authors of the post.
+     */
+    List<PostPerson> authors;
+    /**
+     * The list of categories associated with the post.
+     */
+    List<String> postCategories;
+    /**
+     * The timestamp of when the post was published.
+     */
+    Date publishTimestamp;
+    /**
+     * The timestamp of when the post will expire.
+     */
+    Date expirationTimestamp;
+    /**
+     * The list of enclosures associated with the post.
+     */
+    List<PostEnclosure> enclosures;
+    /**
+     * The timestamp of the last update to the post.
+     */
+    Date lastUpdatedTimestamp;
+    /**
+     * Indicates whether the post is published.
+     */
+    @Setter(PUBLIC)
+    boolean isPublished;
+    /**
+     * The publication status of the post.
+     */
     @Setter(PUBLIC) // newsgears-data/StagingPostDao
-    private boolean isPublished;
-
+            PostPubStatus postPubStatus;
+    /**
+     * The read status of the post.
+     */
     @Setter(PUBLIC) // newsgears-data/StagingPostDao
-    private PostPubStatus postPubStatus;
+            PostReadStatus postReadStatus;
+    /**
+     * The timestamp the post was created.
+     */
+    Date created;
+    /**
+     * The timestamp the post was last modified in any way.
+     */
+    Date lastModified;
 
-    @Setter(PUBLIC) // newsgears-data/StagingPostDao
-    private PostReadStatus postReadStatus;
-
+    /**
+     * Creates a new StagingPost with the specified properties.
+     *
+     * @param importerId            The identifier of the importer associated with this post.
+     * @param queueId               The unique identifier of the queue.
+     * @param importerDesc          The description of the importer.
+     * @param subscriptionId        The unique identifier of the subscription.
+     * @param postTitle             The title of the post.
+     * @param postDesc              The description of the post.
+     * @param postContents          The contents of the post.
+     * @param postMedia             The media associated with the post.
+     * @param postITunes            The iTunes-specific data for the post.
+     * @param postUrl               The URL of the post.
+     * @param postUrls              The list of URLs associated with the post.
+     * @param postImgUrl            The URL of the post's image.
+     * @param postImgTransportIdent The transport identifier of the post's image.
+     * @param importTimestamp       The timestamp when the post was imported.
+     * @param postHash              The hash value of the post.
+     * @param username              The username associated with the post.
+     * @param postComment           The comment associated with the post.
+     * @param postRights            The rights associated with the post.
+     * @param contributors          The list of contributors to the post.
+     * @param authors               The list of authors of the post.
+     * @param postCategories        The categories associated with the post.
+     * @param publishTimestamp      The timestamp when the post is published.
+     * @param expirationTimestamp   The timestamp when the post expires.
+     * @param enclosures            The list of enclosures associated with the post.
+     * @param lastUpdatedTimestamp  The timestamp when the post was last updated.
+     * @param created               The timestamp when the post was created.
+     * @param lastModified          The timestamp when the post was last modified.
+     */
     StagingPost(String importerId,
                 Long queueId,
                 String importerDesc,
@@ -143,7 +255,7 @@ public class StagingPost implements Serializable {
                 ContentObject postDesc,
                 List<ContentObject> postContents,
                 PostMedia postMedia,
-                PostITunes postItunes,
+                PostITunes postITunes,
                 String postUrl,
                 List<PostUrl> postUrls,
                 String postImgUrl,
@@ -159,7 +271,9 @@ public class StagingPost implements Serializable {
                 Date publishTimestamp,
                 Date expirationTimestamp,
                 List<PostEnclosure> enclosures,
-                Date lastUpdatedTimestamp
+                Date lastUpdatedTimestamp,
+                Date created,
+                Date lastModified
     ) {
         this.importerId = importerId;
         this.queueId = queueId;
@@ -169,8 +283,8 @@ public class StagingPost implements Serializable {
         this.postDesc = postDesc;
         this.postContents = postContents;
         this.postMedia = postMedia;
-        this.postITunes = postItunes;
-        this.postUrl = defaultString(trimToLength(POST_URL_FIELD_NAME, postUrl, 1024)); // 1024 required
+        this.postITunes = postITunes;
+        this.postUrl = trimToLength(POST_URL_FIELD_NAME, postUrl, 1024); // 1024
         this.postUrls = postUrls; // json
         this.postImgUrl = trimToLength(POST_IMG_URL_FIELD_NAME, postImgUrl, 1024); // 1024
         this.postImgTransportIdent = postImgTransportIdent; // 256
@@ -186,6 +300,8 @@ public class StagingPost implements Serializable {
         this.expirationTimestamp = expirationTimestamp; // timestamp
         this.enclosures = enclosures; // json
         this.lastUpdatedTimestamp = lastUpdatedTimestamp; // timestamp
+        this.created = created;
+        this.lastModified = lastModified;
     }
 
     private static String trimToLength(String fieldName, String str, int len) {
@@ -198,9 +314,39 @@ public class StagingPost implements Serializable {
         }
         return t.substring(0, min(len, t.length()));
     }
-    //
-    // has all args except Id
-    //
+
+    /**
+     * Static factory method to create a StagingPost object.
+     *
+     * @param importerId            The identifier of the importer associated with this post.
+     * @param queueId               The unique identifier of the queue.
+     * @param importerDesc          The description of the importer.
+     * @param subscriptionId        The unique identifier of the subscription.
+     * @param postTitle             The title of the post.
+     * @param postDesc              The description of the post.
+     * @param postContents          The contents of the post.
+     * @param postMedia             The media associated with the post.
+     * @param postITunes            The iTunes-specific data for the post.
+     * @param postUrl               The URL of the post.
+     * @param postUrls              The list of URLs associated with the post.
+     * @param postImgUrl            The URL of the post's image.
+     * @param postImgTransportIdent The transport identifier of the post's image.
+     * @param importTimestamp       The timestamp when the post was imported.
+     * @param postHash              The hash value of the post.
+     * @param username              The username associated with the post.
+     * @param postComment           The comment associated with the post.
+     * @param postRights            The rights associated with the post.
+     * @param contributors          The list of contributors to the post.
+     * @param authors               The list of authors of the post.
+     * @param postCategories        The categories associated with the post.
+     * @param publishTimestamp      The timestamp when the post is published.
+     * @param expirationTimestamp   The timestamp when the post expires.
+     * @param enclosures            The list of enclosures associated with the post.
+     * @param lastUpdatedTimestamp  The timestamp when the post was last updated.
+     * @param created               The timestamp when the post was created.
+     * @param lastModified          The timestamp when the post was last modified.
+     * @return A new StagingPost instance.
+     */
     @SuppressWarnings("unused")
     public static StagingPost from(
             // Long id,
@@ -228,8 +374,9 @@ public class StagingPost implements Serializable {
             Date publishTimestamp,
             Date expirationTimestamp,
             List<PostEnclosure> enclosures,
-            Date lastUpdatedTimestamp)
-    {
+            Date lastUpdatedTimestamp,
+            Date created,
+            Date lastModified) {
         return new StagingPost(
                 importerId,
                 queueId,
@@ -255,12 +402,41 @@ public class StagingPost implements Serializable {
                 publishTimestamp,
                 expirationTimestamp,
                 enclosures,
-                lastUpdatedTimestamp
+                lastUpdatedTimestamp,
+                created,
+                lastModified
         );
     }
-    //
-    // missing Id, img transport ident
-    //
+
+    /**
+     * Static factory method to create a StagingPost object without an image transport identifier.
+     *
+     * @param importerId           The identifier of the importer associated with this post.
+     * @param queueId              The unique identifier of the queue.
+     * @param importerDesc         The description of the importer.
+     * @param subscriptionId       The unique identifier of the subscription.
+     * @param postTitle            The title of the post.
+     * @param postDesc             The description of the post.
+     * @param postContents         The contents of the post.
+     * @param postMedia            The media associated with the post.
+     * @param postITunes           The iTunes-specific data for the post.
+     * @param postUrl              The URL of the post.
+     * @param postUrls             The list of URLs associated with the post.
+     * @param postImgUrl           The URL of the post's image.
+     * @param importTimestamp      The timestamp when the post was imported.
+     * @param postHash             The hash value of the post.
+     * @param username             The username associated with the post.
+     * @param postComment          The comment associated with the post.
+     * @param postRights           The rights associated with the post.
+     * @param contributors         The list of contributors to the post.
+     * @param authors              The list of authors of the post.
+     * @param postCategories       The categories associated with the post.
+     * @param publishTimestamp     The timestamp when the post is published.
+     * @param expirationTimestamp  The timestamp when the post expires.
+     * @param enclosures           The list of enclosures associated with the post.
+     * @param lastUpdatedTimestamp The timestamp when the post was last updated.
+     * @return A new StagingPost instance without an image transport identifier.
+     */
     @SuppressWarnings("unused")
     public static StagingPost from(
             String importerId,
@@ -315,10 +491,20 @@ public class StagingPost implements Serializable {
                 publishTimestamp,
                 expirationTimestamp,
                 enclosures,
-                lastUpdatedTimestamp
+                lastUpdatedTimestamp,
+                new Date(),
+                null
         );
     }
 
+    /**
+     * Static factory method to create a StagingPost object based on an existing post with a new post hash.
+     *
+     * @param copy                   The existing StagingPost to copy.
+     * @param subscriptionDefinition The subscription definition associated with this post.
+     * @param postHash               The new hash value of the post.
+     * @return A new StagingPost instance with updated post hash.
+     */
     public static StagingPost from(StagingPost copy, SubscriptionDefinition subscriptionDefinition, String postHash) {
         return new StagingPost(
                 copy.importerId,
@@ -345,7 +531,9 @@ public class StagingPost implements Serializable {
                 copy.publishTimestamp,
                 copy.expirationTimestamp,
                 copy.enclosures,
-                copy.lastUpdatedTimestamp
+                copy.lastUpdatedTimestamp,
+                copy.created,
+                copy.lastModified
         );
     }
 
@@ -360,35 +548,60 @@ public class StagingPost implements Serializable {
         return null;
     }
 
+    /**
+     * Computes the hash of the post's image URL using the provided message digest.
+     *
+     * @param md         The message digest algorithm instance.
+     * @param postImgUrl The URL of the post's image.
+     * @return The hash of the post's image URL.
+     */
     static String computeThumbnailHash(MessageDigest md, String postImgUrl) {
         return isNotEmpty(postImgUrl) ? printHexBinary(md.digest(serialize(postImgUrl))) : null;
     }
 
-    public static final StagingPost END_IMPORT = new StagingPost(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    );
+    /**
+     * Enum representing the publication status of a staging post.
+     */
+    @SuppressWarnings("unused")
+    public enum PostPubStatus {
+        /**
+         * Unpublished (default) status.
+         */
+        UNPUBLISHED,
+        /**
+         * Pending publication status.
+         */
+        PUB_PENDING,
+        /**
+         * Pending de-publication status.
+         */
+        DEPUB_PENDING,
+        /**
+         * Archived publication status.
+         */
+        ARCHIVED,
+        /**
+         * Pending purging status.
+         */
+        PURGE_PENDING
+    }
+
+    /**
+     * Enum representing the read status of a staging post.
+     */
+    @SuppressWarnings("unused")
+    public enum PostReadStatus {
+        /**
+         * Unread read status.
+         */
+        UNREAD,
+        /**
+         * Read read status.
+         */
+        READ,
+        /**
+         * Read later read status.
+         */
+        READ_LATER
+    }
 }

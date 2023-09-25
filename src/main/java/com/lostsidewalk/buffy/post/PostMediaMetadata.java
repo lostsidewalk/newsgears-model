@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,42 +16,179 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
 
+/**
+ * Represents the metadata associated with media in a post.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(NON_EMPTY)
+@NoArgsConstructor
 public class PostMediaMetadata extends BasePostMediaObject implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 212267345121249823L;
 
+    /**
+     * List of thumbnails associated with the media.
+     */
     List<PostMediaThumbnail> thumbnails;
+
+    /**
+     * Community information associated with the media.
+     */
     PostMediaCommunity community;
+
+    /**
+     * List of categories associated with the media.
+     */
     List<PostMediaCategory> categories;
+
+    /**
+     * Copyright information associated with the media.
+     */
     String copyright;
+
+    /**
+     * Copyright URL associated with the media.
+     */
     URI copyrightUrl;
+
+    /**
+     * Description of the media.
+     */
     String desc;
+
+    /**
+     * Description type of the media.
+     */
     String descType;
+
+    /**
+     * Array of backlinks associated with the media.
+     */
     URL[] backLinks;
+
+    /**
+     * Array of comments associated with the media.
+     */
     String[] comments;
+
+    /**
+     * List of credits associated with the media.
+     */
     List<PostMediaCredit> credits;
+
+    /**
+     * Hash value associated with the media.
+     */
     PostMediaHash hash;
+
+    /**
+     * Array of keywords associated with the media.
+     */
     String[] keywords;
+
+    /**
+     * List of licenses associated with the media.
+     */
     List<PostMediaLicense> licenses;
+
+    /**
+     * List of locations associated with the media.
+     */
     List<PostMediaLocation> locations;
+
+    /**
+     * List of peer links associated with the media.
+     */
     List<PostMediaPeerLink> peerLinks;
+
+    /**
+     * List of prices associated with the media.
+     */
     List<PostMediaPrice> prices;
+
+    /**
+     * List of ratings associated with the media.
+     */
     List<PostMediaRating> ratings;
+
+    /**
+     * Array of responses associated with the media.
+     */
     String[] responses;
+
+    /**
+     * List of restrictions associated with the media.
+     */
     List<PostMediaRestriction> restrictions;
+
+    /**
+     * Rights associated with the media.
+     */
     String rights;
+
+    /**
+     * List of scenes associated with the media.
+     */
     List<PostMediaScene> scenes;
+
+    /**
+     * Status of the media.
+     */
     PostMediaStatus status;
+
+    /**
+     * List of subtitles associated with the media.
+     */
     List<PostMediaSubTitle> subTitles;
+
+    /**
+     * List of text elements associated with the media.
+     */
     List<PostMediaText> text;
+
+    /**
+     * Title of the media.
+     */
     String title;
+
+    /**
+     * Title type of the media.
+     */
     String titleType;
 
-    public PostMediaMetadata(
+    /**
+     * Creates a new instance of PostMediaMetadata.
+     *
+     * @param thumbnails   List of thumbnails associated with the media.
+     * @param community    Community information associated with the media.
+     * @param categories   List of categories associated with the media.
+     * @param copyright    Copyright information associated with the media.
+     * @param copyrightUrl Copyright URL associated with the media.
+     * @param desc         Description of the media.
+     * @param descType     Description type of the media.
+     * @param backLinks    Array of backlinks associated with the media.
+     * @param comments     Array of comments associated with the media.
+     * @param credits      List of credits associated with the media.
+     * @param hash         Hash value associated with the media.
+     * @param keywords     Array of keywords associated with the media.
+     * @param licenses     List of licenses associated with the media.
+     * @param locations    List of locations associated with the media.
+     * @param peerLinks    List of peer links associated with the media.
+     * @param prices       List of prices associated with the media.
+     * @param ratings      List of ratings associated with the media.
+     * @param responses    Array of responses associated with the media.
+     * @param restrictions List of restrictions associated with the media.
+     * @param rights       Rights associated with the media.
+     * @param scenes       List of scenes associated with the media.
+     * @param status       Status of the media.
+     * @param subTitles    List of subtitles associated with the media.
+     * @param text         List of text elements associated with the media.
+     * @param title        Title of the media.
+     * @param titleType    Title type of the media.
+     */
+    PostMediaMetadata(
             List<PostMediaThumbnail> thumbnails,
             PostMediaCommunity community,
             List<PostMediaCategory> categories,
@@ -76,8 +214,7 @@ public class PostMediaMetadata extends BasePostMediaObject implements Serializab
             List<PostMediaSubTitle> subTitles,
             List<PostMediaText> text,
             String title,
-            String titleType)
-    {
+            String titleType) {
         super();
         this.thumbnails = thumbnails;
         this.community = community;
@@ -107,6 +244,12 @@ public class PostMediaMetadata extends BasePostMediaObject implements Serializab
         this.titleType = titleType;
     }
 
+    /**
+     * Creates a new instance of PostMediaMetadata from a Metadata instance.
+     *
+     * @param metadata The Metadata instance to convert from.
+     * @return A PostMediaMetadata object with data from the Metadata instance.
+     */
     public static PostMediaMetadata from(Metadata metadata) {
         List<PostMediaThumbnail> thumbnails = stream(metadata.getThumbnail()).map(PostMediaThumbnail::from).toList();
         PostMediaCommunity community = ofNullable(metadata.getCommunity()).map(PostMediaCommunity::from).orElse(null);
@@ -166,6 +309,11 @@ public class PostMediaMetadata extends BasePostMediaObject implements Serializab
         );
     }
 
+    /**
+     * Converts the PostMediaMetadata object to a Metadata instance.
+     *
+     * @return A Metadata instance representing the PostMediaMetadata data.
+     */
     @SuppressWarnings({"unused"})
     public Metadata toModule() {
         Metadata metadata = new Metadata();

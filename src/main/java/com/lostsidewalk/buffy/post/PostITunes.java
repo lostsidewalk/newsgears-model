@@ -7,6 +7,7 @@ import com.rometools.modules.itunes.FeedInformationImpl;
 import com.rometools.modules.itunes.ITunes;
 import com.rometools.modules.itunes.types.Duration;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,33 +15,119 @@ import java.net.URL;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
+/**
+ * Represents iTunes-specific metadata associated with a post.
+ */
 @Data
 @JsonInclude(NON_EMPTY)
+@NoArgsConstructor
 public class PostITunes implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 983403122303L;
 
+    /**
+     * The author associated with this post
+     */
     String author;
-    boolean isBlock; // wtf does this mean
+
+    /**
+     * Indicates if the post is blocked
+     */
+    boolean isBlock;
+
+    /**
+     * Indicates if the post is explicit
+     */
     boolean isExplicit;
-    Boolean isExplicitNullable; // again, sounds stupid
+
+    /**
+     * Indicates if the explicit status is nullable
+     */
+    Boolean isExplicitNullable;
+
+    /**
+     * The URL of the image associated with the post
+     */
     URL image;
+
+    /**
+     * The URI of the image associated with the post
+     */
     String imageUri;
+
+    /**
+     * Keywords associated with the post
+     */
     String[] keywords;
+
+    /**
+     * Subtitle of the post
+     */
     String subTitle;
+
+    /**
+     * Summary of the post
+     */
     String summary;
+
+    /**
+     * Indicates if the post is close captioned
+     */
     boolean isCloseCaptioned;
+
+    /**
+     * Duration of the post
+     */
     Duration duration;
+
+    /**
+     * Episode number of the post
+     */
     Integer episode;
+
+    /**
+     * Type of the episode
+     */
     String episodeType;
+
+    /**
+     * Order of the post
+     */
     Integer order;
+
+    /**
+     * Season number of the post
+     */
     Integer season;
+
+    /**
+     * Title of the post
+     */
     String title;
 
+    /**
+     * Private constructor for creating a PostITunes object.
+     *
+     * @param author             The author associated with this post.
+     * @param isBlock            Indicates if the post is blocked.
+     * @param isExplicit         Indicates if the post is explicit.
+     * @param isExplicitNullable Indicates if the explicit status is nullable.
+     * @param image              The URL of the image associated with the post.
+     * @param imageUri           The URI of the image associated with the post.
+     * @param keywords           Keywords associated with the post.
+     * @param subTitle           Subtitle of the post.
+     * @param summary            Summary of the post.
+     * @param isCloseCaptioned   Indicates if the post is close captioned.
+     * @param duration           Duration of the post.
+     * @param episode            Episode number of the post.
+     * @param episodeType        Type of the episode.
+     * @param order              Order of the post.
+     * @param season             Season number of the post.
+     * @param title              Title of the post.
+     */
     PostITunes(String author, boolean isBlock, boolean isExplicit, Boolean isExplicitNullable, URL image, String imageUri, String[] keywords, String subTitle, String summary,
-               boolean isCloseCaptioned, Duration duration, Integer episode, String episodeType, Integer order, Integer season, String title)
-    {
+               boolean isCloseCaptioned, Duration duration, Integer episode, String episodeType, Integer order, Integer season, String title) {
         this.author = author;
         this.isBlock = isBlock;
         this.isExplicit = isExplicit;
@@ -59,6 +146,12 @@ public class PostITunes implements Serializable {
         this.title = title;
     }
 
+    /**
+     * Static factory method to create a PostITunes object from an ITunes instance.
+     *
+     * @param iTunes The ITunes instance to convert to a PostITunes object.
+     * @return A new PostITunes object created from the given ITunes instance.
+     */
     public static PostITunes from(ITunes iTunes) {
         String author = iTunes.getAuthor();
         boolean isBlock = iTunes.getBlock(); // wtf does this mean
@@ -107,6 +200,11 @@ public class PostITunes implements Serializable {
         );
     }
 
+    /**
+     * Converts the PostITunes object to an ITunes entry module.
+     *
+     * @return An ITunes entry module representing the PostITunes object.
+     */
     @SuppressWarnings("unused")
     public ITunes toEntryModule() {
         EntryInformationImpl e = new EntryInformationImpl();
@@ -123,6 +221,11 @@ public class PostITunes implements Serializable {
         return e;
     }
 
+    /**
+     * Converts the PostITunes object to an ITunes feed module.
+     *
+     * @return An ITunes feed module representing the PostITunes object.
+     */
     @SuppressWarnings("unused")
     public ITunes toFeedModule() {
         FeedInformationImpl f = new FeedInformationImpl();

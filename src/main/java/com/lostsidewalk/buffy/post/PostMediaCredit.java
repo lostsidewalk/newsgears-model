@@ -9,6 +9,9 @@ import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
+/**
+ * Represents media credit associated with a post's media.
+ */
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaCredit implements Serializable {
@@ -16,22 +19,49 @@ public class PostMediaCredit implements Serializable {
     @Serial
     private static final long serialVersionUID = 29823012319823L;
 
-    private String name;
+    /**
+     * Name of the contributor.
+     */
+    String name;
 
-    private String role;
+    /**
+     * Role of the contributor.
+     */
+    String role;
 
-    private String scheme;
+    /**
+     * Scheme specifying the role of the contributor.
+     */
+    String scheme;
 
+    /**
+     * Constructor to create a PostMediaCredit object.
+     *
+     * @param name   Name of the contributor.
+     * @param role   Role of the contributor.
+     * @param scheme Scheme specifying the role of the contributor.
+     */
     PostMediaCredit(String name, String role, String scheme) {
         this.name = name;
         this.role = role;
         this.scheme = scheme;
     }
 
-    public static PostMediaCredit from(Credit t) {
-        return new PostMediaCredit(t.getName(), t.getRole(), t.getScheme());
+    /**
+     * Creates a PostMediaCredit object from a Credit instance.
+     *
+     * @param credit The Credit instance to convert from.
+     * @return A PostMediaCredit object with data from the Credit instance.
+     */
+    public static PostMediaCredit from(Credit credit) {
+        return new PostMediaCredit(credit.getName(), credit.getRole(), credit.getScheme());
     }
 
+    /**
+     * Converts the PostMediaCredit object to a Credit instance.
+     *
+     * @return A Credit instance representing the PostMediaCredit data.
+     */
     public Credit toModule() {
         return new Credit(scheme, role, name);
     }
