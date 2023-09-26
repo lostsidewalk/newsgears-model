@@ -51,7 +51,7 @@ dependencies {
     api 'com.rometools:rome-opml:2.1.0'
     // rome-modules
     api 'com.rometools:rome-modules:2.1.0'
-99
+
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
