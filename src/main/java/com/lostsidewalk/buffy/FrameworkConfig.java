@@ -15,6 +15,13 @@ import java.util.Map;
 public class FrameworkConfig {
 
     /**
+     * Default constructor; initializes the object.
+     */
+    public FrameworkConfig() {
+        super();
+    }
+
+    /**
      * The key for the username field in the configuration.
      */
     public static final String USERNAME = "username";

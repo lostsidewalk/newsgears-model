@@ -12,6 +12,13 @@ import lombok.Data;
 public class Role {
 
     /**
+     * Default constructor; initializes the object.
+     */
+    Role() {
+        super();
+    }
+
+    /**
      * The unique identifier of the role.
      */
     private Long id;

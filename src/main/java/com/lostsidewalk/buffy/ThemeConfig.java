@@ -14,6 +14,13 @@ import java.util.Map;
 public class ThemeConfig {
 
     /**
+     * Default constructor; initializes the object.
+     */
+    ThemeConfig() {
+        super();
+    }
+
+    /**
      * Configuration map for the light theme.
      */
     Map<String, String> lightTheme;
