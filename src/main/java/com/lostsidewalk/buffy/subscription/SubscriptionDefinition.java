@@ -2,6 +2,7 @@ package com.lostsidewalk.buffy.subscription;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a subscription definition that specifies how to import feed data.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class SubscriptionDefinition implements Serializable {

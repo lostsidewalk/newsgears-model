@@ -1,12 +1,14 @@
 package com.lostsidewalk.buffy.auth;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 
 /**
  * Represents an API key associated with a user for authentication purposes.
  */
+@Slf4j
 @Data
 public class ApiKey {
 

@@ -1,6 +1,7 @@
 package com.lostsidewalk.buffy.discovery;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Date;
  *
  * @since [Include the version or date when this class was introduced]
  */
+@Slf4j
 @Data
 public class FeedDiscoverySampleItem implements Serializable {
 
@@ -48,13 +50,13 @@ public class FeedDiscoverySampleItem implements Serializable {
     }
 
     /**
-     * Constructs a new instance of {@link FeedDiscoverySampleItem} with the specified properties.
+     * Constructs a new instance of {FeedDiscoverySampleItem} with the specified properties.
      *
      * @param title      The title of the sampled item.
      * @param uri        The URI associated with the sampled item.
      * @param link       The link associated with the sampled item.
      * @param updateDate The date when the sampled item was last updated.
-     * @return A new instance of {@link FeedDiscoverySampleItem} with the specified properties.
+     * @return A new instance of {FeedDiscoverySampleItem} with the specified properties.
      */
     public static FeedDiscoverySampleItem from(String title, String uri, String link, Date updateDate) {
         return new FeedDiscoverySampleItem(title, uri, link, updateDate);

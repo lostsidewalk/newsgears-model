@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Thumbnail;
 import com.rometools.modules.mediarss.types.Time;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a thumbnail associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaThumbnail implements Serializable {
@@ -71,7 +73,7 @@ public class PostMediaThumbnail implements Serializable {
      *
      * @return A Thumbnail object.
      */
-    public Thumbnail toModule() {
+    public final Thumbnail toModule() {
         return new Thumbnail(url, width, height, time);
     }
 }

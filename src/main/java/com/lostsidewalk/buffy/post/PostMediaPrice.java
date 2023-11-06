@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Price;
 import com.rometools.modules.mediarss.types.Price.Type;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a price associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaPrice implements Serializable {
@@ -73,7 +75,7 @@ public class PostMediaPrice implements Serializable {
      *
      * @return A Price object.
      */
-    public Price toModule() {
+    public final Price toModule() {
         Price p = new Price();
         p.setType(type);
         p.setPrice(price);

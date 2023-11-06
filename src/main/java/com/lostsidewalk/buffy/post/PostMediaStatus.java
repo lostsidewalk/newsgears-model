@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Status;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents the status of a media associated with a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaStatus implements Serializable {
@@ -55,7 +57,7 @@ public class PostMediaStatus implements Serializable {
      *
      * @return A Status instance representing the PostMediaStatus data.
      */
-    public Status toModule() {
+    public final Status toModule() {
         Status status = new Status();
         status.setReason(reason);
         status.setState(state);

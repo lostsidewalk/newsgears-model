@@ -1,6 +1,7 @@
 package com.lostsidewalk.buffy.discovery;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * Represents information about an image discovered in a feed, including title, description, dimensions, link, and URL.
  */
+@Slf4j
 @Data
 public class FeedDiscoveryImageInfo implements Serializable {
 

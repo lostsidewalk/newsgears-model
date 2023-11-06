@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Scene;
 import com.rometools.modules.mediarss.types.Time;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  * Represents a scene associated with a media content in a post. A scene describes a specific
  * portion of media content, including its description, title, start time, and end time.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaScene implements Serializable {
@@ -71,13 +73,13 @@ public class PostMediaScene implements Serializable {
      *
      * @return A Scene instance corresponding to the PostMediaScene.
      */
-    public Scene toModule() {
-        Scene s = new Scene();
-        s.setDescription(description);
-        s.setTitle(title);
-        s.setStartTime(startTime);
-        s.setEndTime(endTime);
+    public final Scene toModule() {
+        Scene scene = new Scene();
+        scene.setDescription(description);
+        scene.setTitle(title);
+        scene.setStartTime(startTime);
+        scene.setEndTime(endTime);
 
-        return s;
+        return scene;
     }
 }

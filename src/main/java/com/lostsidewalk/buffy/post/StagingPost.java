@@ -14,6 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -215,6 +216,11 @@ public class StagingPost implements Serializable, Auditable {
      * The timestamp the post was last modified in any way.
      */
     Date lastModified;
+    /**
+     * Indicates whether the post is archived.
+     */
+    @Setter(PUBLIC) // newsgears-data/StagingPostDao
+    boolean isArchived;
 
     /**
      * Creates a new StagingPost with the specified properties.
@@ -247,33 +253,33 @@ public class StagingPost implements Serializable, Auditable {
      * @param created               The timestamp when the post was created.
      * @param lastModified          The timestamp when the post was last modified.
      */
-    StagingPost(String importerId,
-                Long queueId,
-                String importerDesc,
-                Long subscriptionId,
-                ContentObject postTitle,
-                ContentObject postDesc,
-                List<ContentObject> postContents,
-                PostMedia postMedia,
-                PostITunes postITunes,
-                String postUrl,
-                List<PostUrl> postUrls,
-                String postImgUrl,
-                String postImgTransportIdent,
-                Date importTimestamp,
-                String postHash,
-                String username,
-                String postComment,
-                String postRights,
-                List<PostPerson> contributors,
-                List<PostPerson> authors,
-                List<String> postCategories,
-                Date publishTimestamp,
-                Date expirationTimestamp,
-                List<PostEnclosure> enclosures,
-                Date lastUpdatedTimestamp,
-                Date created,
-                Date lastModified
+    private StagingPost(String importerId,
+                        Long queueId,
+                        String importerDesc,
+                        Long subscriptionId,
+                        ContentObject postTitle,
+                        ContentObject postDesc,
+                        Collection<? extends ContentObject> postContents,
+                        PostMedia postMedia,
+                        PostITunes postITunes,
+                        String postUrl,
+                        Collection<? extends PostUrl> postUrls,
+                        String postImgUrl,
+                        String postImgTransportIdent,
+                        Date importTimestamp,
+                        String postHash,
+                        String username,
+                        String postComment,
+                        String postRights,
+                        Collection<? extends PostPerson> contributors,
+                        Collection<? extends PostPerson> authors,
+                        Collection<String> postCategories,
+                        Date publishTimestamp,
+                        Date expirationTimestamp,
+                        Collection<? extends PostEnclosure> enclosures,
+                        Date lastUpdatedTimestamp,
+                        Date created,
+                        Date lastModified
     ) {
         this.importerId = importerId;
         this.queueId = queueId;
@@ -281,27 +287,27 @@ public class StagingPost implements Serializable, Auditable {
         this.subscriptionId = subscriptionId;
         this.postTitle = postTitle;
         this.postDesc = postDesc;
-        this.postContents = postContents;
+        this.postContents = postContents == null ? null : List.copyOf(postContents);
         this.postMedia = postMedia;
         this.postITunes = postITunes;
         this.postUrl = trimToLength(POST_URL_FIELD_NAME, postUrl, 1024); // 1024
-        this.postUrls = postUrls; // json
+        this.postUrls = postUrls == null ? null : List.copyOf(postUrls); // json
         this.postImgUrl = trimToLength(POST_IMG_URL_FIELD_NAME, postImgUrl, 1024); // 1024
         this.postImgTransportIdent = postImgTransportIdent; // 256
-        this.importTimestamp = importTimestamp; // required
+        this.importTimestamp = importTimestamp == null ? null : new Date(importTimestamp.getTime()); // required
         this.postHash = postHash; // 64 required
         this.username = username; // 100 required
         this.postComment = trimToLength(POST_COMMENT_FIELD_NAME, postComment, 2048); // 2048
         this.postRights = trimToLength(POST_RIGHTS_FIELD_NAME, postRights, 1024); // 1024
-        this.contributors = contributors; // json
-        this.authors = authors; // json
-        this.postCategories = postCategories; // json
-        this.publishTimestamp = publishTimestamp; // timestamp
-        this.expirationTimestamp = expirationTimestamp; // timestamp
-        this.enclosures = enclosures; // json
-        this.lastUpdatedTimestamp = lastUpdatedTimestamp; // timestamp
-        this.created = created;
-        this.lastModified = lastModified;
+        this.contributors = contributors == null ? null : List.copyOf(contributors); // json
+        this.authors = authors == null ? null : List.copyOf(authors); // json
+        this.postCategories = postCategories == null ? null : List.copyOf(postCategories); // json
+        this.publishTimestamp = publishTimestamp == null ? null : new Date(publishTimestamp.getTime()); // timestamp
+        this.expirationTimestamp = expirationTimestamp == null ? null : new Date(expirationTimestamp.getTime()); // timestamp
+        this.enclosures = enclosures == null ? null : List.copyOf(enclosures); // json
+        this.lastUpdatedTimestamp = lastUpdatedTimestamp == null ? null : new Date(lastUpdatedTimestamp.getTime()); // timestamp
+        this.created = created == null ? null : new Date(created.getTime());
+        this.lastModified = lastModified == null ? null : new Date(lastModified.getTime());
     }
 
     private static String trimToLength(String fieldName, String str, int len) {
@@ -356,11 +362,11 @@ public class StagingPost implements Serializable, Auditable {
             Long subscriptionId,
             ContentObject postTitle,
             ContentObject postDesc,
-            List<ContentObject> postContents,
+            List<? extends ContentObject> postContents,
             PostMedia postMedia,
             PostITunes postITunes,
             String postUrl,
-            List<PostUrl> postUrls,
+            List<? extends PostUrl> postUrls,
             String postImgUrl,
             String postImgTransportIdent,
             Date importTimestamp,
@@ -368,12 +374,12 @@ public class StagingPost implements Serializable, Auditable {
             String username,
             String postComment,
             String postRights,
-            List<PostPerson> contributors,
-            List<PostPerson> authors,
+            List<? extends PostPerson> contributors,
+            List<? extends PostPerson> authors,
             List<String> postCategories,
             Date publishTimestamp,
             Date expirationTimestamp,
-            List<PostEnclosure> enclosures,
+            List<? extends PostEnclosure> enclosures,
             Date lastUpdatedTimestamp,
             Date created,
             Date lastModified) {
@@ -445,11 +451,11 @@ public class StagingPost implements Serializable, Auditable {
             Long subscriptionId,
             ContentObject postTitle,
             ContentObject postDesc,
-            List<ContentObject> postContents,
+            List<? extends ContentObject> postContents,
             PostMedia postMedia,
             PostITunes postITunes,
             String postUrl,
-            List<PostUrl> postUrls,
+            List<? extends PostUrl> postUrls,
             String postImgUrl,
             // no img transport ident
             Date importTimestamp,
@@ -457,12 +463,12 @@ public class StagingPost implements Serializable, Auditable {
             String username,
             String postComment,
             String postRights,
-            List<PostPerson> contributors,
-            List<PostPerson> authors,
+            List<? extends PostPerson> contributors,
+            List<? extends PostPerson> authors,
             List<String> postCategories,
             Date publishTimestamp,
             Date expirationTimestamp,
-            List<PostEnclosure> enclosures,
+            List<? extends PostEnclosure> enclosures,
             Date lastUpdatedTimestamp
     ) {
         String postImgTransportIdent = getPostImgUrlHash(postImgUrl);
@@ -555,7 +561,8 @@ public class StagingPost implements Serializable, Auditable {
      * @param postImgUrl The URL of the post's image.
      * @return The hash of the post's image URL.
      */
-    static String computeThumbnailHash(MessageDigest md, String postImgUrl) {
+    @SuppressWarnings("WeakerAccess")
+    public static String computeThumbnailHash(MessageDigest md, String postImgUrl) {
         return isNotEmpty(postImgUrl) ? printHexBinary(md.digest(serialize(postImgUrl))) : null;
     }
 
@@ -565,25 +572,13 @@ public class StagingPost implements Serializable, Auditable {
     @SuppressWarnings("unused")
     public enum PostPubStatus {
         /**
-         * Unpublished (default) status.
-         */
-        UNPUBLISHED,
-        /**
          * Pending publication status.
          */
         PUB_PENDING,
         /**
          * Pending de-publication status.
          */
-        DEPUB_PENDING,
-        /**
-         * Archived publication status.
-         */
-        ARCHIVED,
-        /**
-         * Pending purging status.
-         */
-        PURGE_PENDING
+        DEPUB_PENDING
     }
 
     /**

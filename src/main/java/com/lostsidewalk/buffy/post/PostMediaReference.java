@@ -7,6 +7,7 @@ import com.rometools.modules.mediarss.types.UrlReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a reference associated with media in a post.
  */
+@Slf4j
 @Data
 @EqualsAndHashCode
 @JsonInclude(NON_EMPTY)
@@ -47,6 +49,7 @@ public class PostMediaReference implements Serializable {
      * @return A new PostMediaReference instance.
      */
     public static PostMediaReference from(Reference reference) {
+        //noinspection ChainOfInstanceofChecks
         if (reference instanceof UrlReference) {
             return new PostMediaReference(((UrlReference) reference).getUrl());
         } else if (reference instanceof PlayerReference) {
@@ -61,7 +64,7 @@ public class PostMediaReference implements Serializable {
      *
      * @return A UrlReference object.
      */
-    public Reference toUrlModule() {
+    public final Reference toUrlModule() {
         return new UrlReference(uri);
     }
 
@@ -70,7 +73,7 @@ public class PostMediaReference implements Serializable {
      *
      * @return A PlayerReference object.
      */
-    public Reference toPlayerModule() {
+    public final Reference toPlayerModule() {
         return new PlayerReference(uri);
     }
 }

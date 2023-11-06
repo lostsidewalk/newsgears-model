@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Rating;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a media rating associated with a post's media.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaRating implements Serializable {
@@ -52,7 +54,7 @@ public class PostMediaRating implements Serializable {
      *
      * @return A Rating instance representing the PostMediaRating data.
      */
-    public Rating toModule() {
+    public final Rating toModule() {
         return new Rating(scheme, value);
     }
 }

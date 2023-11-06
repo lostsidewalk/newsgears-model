@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Statistics;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents statistics associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaStatistics implements Serializable {
@@ -55,11 +57,11 @@ public class PostMediaStatistics implements Serializable {
      *
      * @return A Statistics object.
      */
-    public Statistics toModule() {
-        Statistics s = new Statistics();
-        s.setFavorites(getFavorites());
-        s.setViews(getViews());
+    public final Statistics toModule() {
+        Statistics statistics = new Statistics();
+        statistics.setFavorites(favorites);
+        statistics.setViews(views);
 
-        return s;
+        return statistics;
     }
 }

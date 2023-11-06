@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Tag;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a tag associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaTag implements Serializable {

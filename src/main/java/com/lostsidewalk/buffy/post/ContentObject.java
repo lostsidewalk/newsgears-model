@@ -3,12 +3,12 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 /**
  * Represents a content object within a post.
@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
  *
  * @since [Include the version or date when this class was introduced]
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 @NoArgsConstructor
@@ -26,7 +27,6 @@ public class ContentObject implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 2354987329183759L;
-    private static final String ENTITY_PREFIX = "co";
     /**
      * A unique identifier for this content object.
      */
@@ -43,11 +43,12 @@ public class ContentObject implements Serializable {
     /**
      * Constructs a new ContentObject with the specified type and value.
      *
+     * @param ident The unique identifier of this entity.
      * @param type  The type of the content object.
      * @param value The value of the content object.
      */
-    ContentObject(String type, String value) {
-        this.ident = ENTITY_PREFIX + "_" + randomAlphanumeric(8);
+    ContentObject(String ident, String type, String value) {
+        this.ident = ident;
         this.type = type;
         this.value = value;
     }
@@ -55,12 +56,13 @@ public class ContentObject implements Serializable {
     /**
      * Static factory method to create a ContentObject with a random identifier.
      *
+     * @param ident The unique identifier of this entity.
      * @param type  The type of the content object.
      * @param value The value of the content object.
      * @return A ContentObject instance with a unique identifier.
      */
-    public static ContentObject from(String type, String value) {
-        return new ContentObject(type, value);
+    public static ContentObject from(String ident, String type, String value) {
+        return new ContentObject(ident, type, value);
     }
 
     /**
@@ -70,7 +72,7 @@ public class ContentObject implements Serializable {
      * @param value The new value for the content object.
      */
     @SuppressWarnings("unused")
-    public void update(String type, String value) {
+    public final void update(String type, String value) {
         this.type = type;
         this.value = value;
     }

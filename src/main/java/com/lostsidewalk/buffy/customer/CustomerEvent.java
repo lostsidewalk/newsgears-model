@@ -1,10 +1,12 @@
 package com.lostsidewalk.buffy.customer;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents an event related to a customer, including an event type and a payload.
  */
+@Slf4j
 @Data
 public class CustomerEvent {
 

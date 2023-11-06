@@ -2,6 +2,7 @@ package com.lostsidewalk.buffy.subscription;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serial;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * The SubscriptionMetrics class represents metrics related to a subscription.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class SubscriptionMetrics implements Serializable {

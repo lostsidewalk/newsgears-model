@@ -1,6 +1,7 @@
 package com.lostsidewalk.buffy.auth;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 /**
  * The User class represents a user entity with authentication and subscription information.
  */
+@Slf4j
 @Data
 public class User {
 
@@ -63,10 +65,10 @@ public class User {
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
-        this.authProvider = LOCAL;
-        this.authProviderId = null;
-        this.authProviderProfileImgUrl = null;
-        this.authProviderUsername = null;
+        authProvider = LOCAL;
+        authProviderId = null;
+        authProviderProfileImgUrl = null;
+        authProviderUsername = null;
     }
 
     /**
@@ -83,10 +85,10 @@ public class User {
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
-        this.authProvider = LOCAL;
-        this.authProviderId = null;
-        this.authProviderProfileImgUrl = null;
-        this.authProviderUsername = null;
+        authProvider = LOCAL;
+        authProviderId = null;
+        authProviderProfileImgUrl = null;
+        authProviderUsername = null;
     }
 
     /**
@@ -102,7 +104,7 @@ public class User {
     @SuppressWarnings("unused")
     public User(String username, String emailAddress, AuthProvider authProvider, String authProviderId, String authProviderProfileImgUrl, String authProviderUsername) {
         this.username = username;
-        this.password = randomAlphanumeric(32);
+        password = randomAlphanumeric(32);
         this.emailAddress = emailAddress;
         this.authProvider = authProvider;
         this.authProviderId = authProviderId;

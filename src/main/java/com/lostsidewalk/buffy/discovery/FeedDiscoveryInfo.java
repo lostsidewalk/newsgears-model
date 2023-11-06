@@ -260,7 +260,7 @@ public class FeedDiscoveryInfo implements Serializable {
     }
 
     /**
-     * Creates and returns a new instance of {@link FeedDiscoveryInfo} with the specified parameters.
+     * Creates and returns a new instance of {FeedDiscoveryInfo} with the specified parameters.
      *
      * @param feedUrl                   The URL of the feed.
      * @param httpStatusCode            The HTTP status code received when accessing the feed URL.
@@ -289,7 +289,7 @@ public class FeedDiscoveryInfo implements Serializable {
      * @param categories                The categories associated with the feed.
      * @param sampleEntries             A list of sample entries from the feed.
      * @param isUrlUpgradable           Indicates whether the feed URL is upgradable (can be redirected to a more secure URL).
-     * @return A new instance of {@link FeedDiscoveryInfo} with the specified parameters.
+     * @return A new instance of {FeedDiscoveryInfo} with the specified parameters.
      */
     public static FeedDiscoveryInfo from(String feedUrl,
                                          Integer httpStatusCode,
@@ -432,6 +432,9 @@ public class FeedDiscoveryInfo implements Serializable {
     @SuppressWarnings("unused")
     public static class FeedDiscoveryException extends Exception {
 
+        @Serial
+        private static final long serialVersionUID = 985098513098523L;
+
         /**
          * The URL of the feed that triggered the exception.
          */
@@ -515,26 +518,27 @@ public class FeedDiscoveryInfo implements Serializable {
             this.redirectHttpStatusMessage = redirectHttpStatusMessage;
 
             // Determine the exception type based on the underlying exception class.
+            //noinspection IfStatementWithTooManyBranches,ChainOfInstanceofChecks
             if (exception instanceof FileNotFoundException) {
-                this.exceptionType = FeedDiscoveryExceptionType.FILE_NOT_FOUND_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.FILE_NOT_FOUND_EXCEPTION;
             } else if (exception instanceof SSLHandshakeException) {
-                this.exceptionType = FeedDiscoveryExceptionType.SSL_HANDSHAKE_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.SSL_HANDSHAKE_EXCEPTION;
             } else if (exception instanceof UnknownHostException) {
-                this.exceptionType = FeedDiscoveryExceptionType.UNKNOWN_HOST_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.UNKNOWN_HOST_EXCEPTION;
             } else if (exception instanceof SocketTimeoutException) {
-                this.exceptionType = FeedDiscoveryExceptionType.SOCKET_TIMEOUT_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.SOCKET_TIMEOUT_EXCEPTION;
             } else if (exception instanceof ConnectException) {
-                this.exceptionType = FeedDiscoveryExceptionType.CONNECT_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.CONNECT_EXCEPTION;
             } else if (exception instanceof SocketException) {
-                this.exceptionType = FeedDiscoveryExceptionType.SOCKET_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.SOCKET_EXCEPTION;
             } else if (exception instanceof IllegalArgumentException) {
-                this.exceptionType = FeedDiscoveryExceptionType.ILLEGAL_ARGUMENT_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.ILLEGAL_ARGUMENT_EXCEPTION;
             } else if (exception instanceof ParsingFeedException) {
-                this.exceptionType = FeedDiscoveryExceptionType.PARSING_FEED_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.PARSING_FEED_EXCEPTION;
             } else if (exception instanceof IOException) {
-                this.exceptionType = FeedDiscoveryExceptionType.IO_EXCEPTION;
+                exceptionType = FeedDiscoveryExceptionType.IO_EXCEPTION;
             } else {
-                this.exceptionType = FeedDiscoveryExceptionType.OTHER;
+                exceptionType = FeedDiscoveryExceptionType.OTHER;
             }
         }
     }

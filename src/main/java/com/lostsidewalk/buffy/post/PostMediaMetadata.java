@@ -5,20 +5,25 @@ import com.rometools.modules.mediarss.types.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.collections4.CollectionUtils.size;
 
 /**
  * Represents the metadata associated with media in a post.
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(NON_EMPTY)
@@ -188,58 +193,57 @@ public class PostMediaMetadata extends BasePostMediaObject implements Serializab
      * @param title        Title of the media.
      * @param titleType    Title type of the media.
      */
-    PostMediaMetadata(
-            List<PostMediaThumbnail> thumbnails,
+    private PostMediaMetadata(
+            Collection<? extends PostMediaThumbnail> thumbnails,
             PostMediaCommunity community,
-            List<PostMediaCategory> categories,
+            Collection<? extends PostMediaCategory> categories,
             String copyright,
             URI copyrightUrl,
             String desc,
             String descType,
             URL[] backLinks,
             String[] comments,
-            List<PostMediaCredit> credits,
+            Collection<? extends PostMediaCredit> credits,
             PostMediaHash hash,
             String[] keywords,
-            List<PostMediaLicense> licenses,
-            List<PostMediaLocation> locations,
-            List<PostMediaPeerLink> peerLinks,
-            List<PostMediaPrice> prices,
-            List<PostMediaRating> ratings,
+            Collection<? extends PostMediaLicense> licenses,
+            Collection<? extends PostMediaLocation> locations,
+            Collection<? extends PostMediaPeerLink> peerLinks,
+            Collection<? extends PostMediaPrice> prices,
+            Collection<? extends PostMediaRating> ratings,
             String[] responses,
-            List<PostMediaRestriction> restrictions,
+            Collection<? extends PostMediaRestriction> restrictions,
             String rights,
-            List<PostMediaScene> scenes,
+            Collection<? extends PostMediaScene> scenes,
             PostMediaStatus status,
-            List<PostMediaSubTitle> subTitles,
-            List<PostMediaText> text,
+            Collection<? extends PostMediaSubTitle> subTitles,
+            Collection<? extends PostMediaText> text,
             String title,
             String titleType) {
-        super();
-        this.thumbnails = thumbnails;
+        this.thumbnails = thumbnails == null ? null : List.copyOf(thumbnails);
         this.community = community;
-        this.categories = categories;
+        this.categories = categories == null ? null : List.copyOf(categories);
         this.copyright = copyright;
         this.copyrightUrl = copyrightUrl;
         this.desc = desc;
         this.descType = descType;
-        this.backLinks = backLinks;
-        this.comments = comments;
-        this.credits = credits;
+        this.backLinks = backLinks == null ? null : Arrays.copyOf(backLinks, size(backLinks));
+        this.comments = comments == null ? null : Arrays.copyOf(comments, comments.length);
+        this.credits = credits == null ? null : List.copyOf(credits);
         this.hash = hash;
-        this.keywords = keywords;
-        this.licenses = licenses;
-        this.locations = locations;
-        this.peerLinks = peerLinks;
-        this.prices = prices;
-        this.ratings = ratings;
-        this.responses = responses;
-        this.restrictions = restrictions;
+        this.keywords = keywords == null ? null : Arrays.copyOf(keywords, size(keywords));
+        this.licenses = licenses == null ? null : List.copyOf(licenses);
+        this.locations = locations == null ? null : List.copyOf(locations);
+        this.peerLinks = peerLinks == null ? null : List.copyOf(peerLinks);
+        this.prices = prices == null ? null : List.copyOf(prices);
+        this.ratings = ratings == null ? null : List.copyOf(ratings);
+        this.responses = responses == null ? null : Arrays.copyOf(responses, size(responses));
+        this.restrictions = restrictions == null ? null : List.copyOf(restrictions);
         this.rights = rights;
-        this.scenes = scenes;
+        this.scenes = scenes == null ? null : List.copyOf(scenes);
         this.status = status;
-        this.subTitles = subTitles;
-        this.text = text;
+        this.subTitles = subTitles == null ? null : List.copyOf(subTitles);
+        this.text = text == null ? null : List.copyOf(text);
         this.title = title;
         this.titleType = titleType;
     }
@@ -314,35 +318,35 @@ public class PostMediaMetadata extends BasePostMediaObject implements Serializab
      *
      * @return A Metadata instance representing the PostMediaMetadata data.
      */
-    @SuppressWarnings({"unused"})
-    public Metadata toModule() {
+    @SuppressWarnings("unused")
+    public final Metadata toModule() {
         Metadata metadata = new Metadata();
         metadata.setThumbnail(convertArray(this::getThumbnails, PostMediaThumbnail::toModule, Thumbnail.class));
         metadata.setCategories(convertArray(this::getCategories, PostMediaCategory::toModule, Category.class));
-        metadata.setCopyright(getCopyright());
-        metadata.setCopyrightUrl(getCopyrightUrl());
-        metadata.setDescription(getDesc());
-        metadata.setDescriptionType(getDescType());
-        metadata.setBackLinks(getBackLinks());
-        metadata.setComments(getComments());
-        metadata.setCommunity(ofNullable(getCommunity()).map(PostMediaCommunity::toModule).orElse(null));
+        metadata.setCopyright(copyright);
+        metadata.setCopyrightUrl(copyrightUrl);
+        metadata.setDescription(desc);
+        metadata.setDescriptionType(descType);
+        metadata.setBackLinks(backLinks);
+        metadata.setComments(comments);
+        metadata.setCommunity(ofNullable(community).map(PostMediaCommunity::toModule).orElse(null));
         metadata.setCredits(convertArray(this::getCredits, PostMediaCredit::toModule, Credit.class));
-        metadata.setHash(ofNullable(getHash()).map(PostMediaHash::toModule).orElse(null));
-        metadata.setKeywords(getKeywords());
+        metadata.setHash(ofNullable(hash).map(PostMediaHash::toModule).orElse(null));
+        metadata.setKeywords(keywords);
         metadata.setLicenses(convertArray(this::getLicenses, PostMediaLicense::toModule, License.class));
         metadata.setLocations(convertArray(this::getLocations, PostMediaLocation::toModule, Location.class));
         metadata.setPeerLinks(convertArray(this::getPeerLinks, PostMediaPeerLink::toModule, PeerLink.class));
         metadata.setPrices(convertArray(this::getPrices, PostMediaPrice::toModule, Price.class));
         metadata.setRatings(convertArray(this::getRatings, PostMediaRating::toModule, Rating.class));
-        metadata.setResponses(getResponses());
+        metadata.setResponses(responses);
         metadata.setRestrictions(convertArray(this::getRestrictions, PostMediaRestriction::toModule, Restriction.class));
-        metadata.setRights(ofNullable(getRights()).map(Metadata.RightsStatus::valueOf).orElse(null)); // TODO: safety
+        metadata.setRights(ofNullable(rights).map(Metadata.RightsStatus::valueOf).orElse(null)); // TODO: safety
         metadata.setScenes(convertArray(this::getScenes, PostMediaScene::toModule, Scene.class));
-        metadata.setStatus(ofNullable(getStatus()).map(PostMediaStatus::toModule).orElse(null));
+        metadata.setStatus(ofNullable(status).map(PostMediaStatus::toModule).orElse(null));
         metadata.setSubTitles(convertArray(this::getSubTitles, PostMediaSubTitle::toModule, SubTitle.class));
         metadata.setText(convertArray(this::getText, PostMediaText::toModule, Text.class));
-        metadata.setTitle(getTitle());
-        metadata.setTitleType(getTitleType());
+        metadata.setTitle(title);
+        metadata.setTitleType(titleType);
 
         return metadata;
     }

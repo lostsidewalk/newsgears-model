@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lostsidewalk.buffy.Auditable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a credential for a feed queue.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 @NoArgsConstructor
@@ -74,8 +76,8 @@ public class QueueCredential implements Serializable, Auditable {
         this.username = username;
         this.basicUsername = basicUsername;
         this.basicPassword = basicPassword;
-        this.created = created;
-        this.lastModified = lastModified;
+        this.created = created == null ? null : new Date(created.getTime());
+        this.lastModified = lastModified == null ? null : new Date(lastModified.getTime());
     }
 
     /**

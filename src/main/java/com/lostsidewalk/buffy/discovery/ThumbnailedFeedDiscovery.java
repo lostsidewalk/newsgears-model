@@ -3,15 +3,18 @@ package com.lostsidewalk.buffy.discovery;
 import com.lostsidewalk.buffy.post.ContentObject;
 import com.lostsidewalk.buffy.post.StagingPost;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 /**
  * The ThumbnailedFeedDiscovery class represents a feed discovery with additional thumbnail-related information.
  */
+@Slf4j
 @Data
 public class ThumbnailedFeedDiscovery implements Serializable {
 
@@ -163,7 +166,7 @@ public class ThumbnailedFeedDiscovery implements Serializable {
      */
     FeedRecommendationInfo feedRecommendationInfo;
 
-    ThumbnailedFeedDiscovery(
+    private ThumbnailedFeedDiscovery(
             Long id,
             String feedUrl,
             Integer httpStatusCode,
@@ -186,11 +189,11 @@ public class ThumbnailedFeedDiscovery implements Serializable {
             String managingEditor,
             Date publishedDate,
             String styleSheet,
-            List<String> supportedTypes,
+            Collection<String> supportedTypes,
             String webMaster,
             String uri,
-            List<String> categories,
-            List<StagingPost> sampleEntries,
+            Collection<String> categories,
+            Collection<? extends StagingPost> sampleEntries,
             boolean isUrlUpgradable,
             FeedRecommendationInfo feedRecommendationInfo) {
         this.id = id;
@@ -213,13 +216,13 @@ public class ThumbnailedFeedDiscovery implements Serializable {
         this.language = language;
         this.link = link;
         this.managingEditor = managingEditor;
-        this.publishedDate = publishedDate;
+        this.publishedDate = publishedDate == null ? null : new Date(publishedDate.getTime());
         this.styleSheet = styleSheet;
-        this.supportedTypes = supportedTypes;
+        this.supportedTypes = supportedTypes == null ? null : List.copyOf(supportedTypes);
         this.webMaster = webMaster;
         this.uri = uri;
-        this.categories = categories;
-        this.sampleEntries = sampleEntries;
+        this.categories = categories == null ? null : List.copyOf(categories);
+        this.sampleEntries = sampleEntries == null ? null : List.copyOf(sampleEntries);
         this.isUrlUpgradable = isUrlUpgradable;
         this.feedRecommendationInfo = feedRecommendationInfo;
     }

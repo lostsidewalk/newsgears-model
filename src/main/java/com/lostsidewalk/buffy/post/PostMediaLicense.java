@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.License;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents the license information for media associated with a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaLicense implements Serializable {
@@ -63,12 +65,12 @@ public class PostMediaLicense implements Serializable {
      *
      * @return A License object.
      */
-    public License toModule() {
-        License l = new License();
-        l.setType(type);
-        l.setHref(href);
-        l.setValue(value);
+    public final License toModule() {
+        License license = new License();
+        license.setType(type);
+        license.setHref(href);
+        license.setValue(value);
 
-        return l;
+        return license;
     }
 }

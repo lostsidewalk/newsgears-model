@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.StarRating;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a star rating associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaStarRating implements Serializable {
@@ -69,12 +71,12 @@ public class PostMediaStarRating implements Serializable {
      *
      * @return A StarRating object.
      */
-    public StarRating toModule() {
+    public final StarRating toModule() {
         StarRating starRating = new StarRating();
-        starRating.setAverage(getAverage());
-        starRating.setCount(getCount());
-        starRating.setMax(getMax());
-        starRating.setMin(getMin());
+        starRating.setAverage(average);
+        starRating.setCount(count);
+        starRating.setMax(max);
+        starRating.setMin(min);
 
         return starRating;
     }

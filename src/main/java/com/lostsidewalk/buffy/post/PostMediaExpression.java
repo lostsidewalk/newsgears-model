@@ -5,6 +5,7 @@ import com.rometools.modules.mediarss.types.Expression;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import static com.rometools.modules.mediarss.types.Expression.*;
 /**
  * Represents media expression associated with a post's media.
  */
+@Slf4j
 @Data
 @EqualsAndHashCode
 @JsonInclude(NON_EMPTY)
@@ -53,8 +55,8 @@ public class PostMediaExpression implements Serializable {
      *
      * @return An Expression instance representing the PostMediaExpression data.
      */
-    public Expression toModule() {
-        return switch (this.expression) {
+    public final Expression toModule() {
+        return switch (expression) {
             case "FULL" -> FULL;
             case "NONSTOP" -> NONSTOP;
             case "SAMPLE" -> SAMPLE;

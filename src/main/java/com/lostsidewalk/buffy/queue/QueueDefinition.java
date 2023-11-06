@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lostsidewalk.buffy.Auditable;
 import lombok.Data;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 /**
  * Represents a definition for a feed queue.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class QueueDefinition implements Serializable, Auditable {
@@ -140,10 +142,10 @@ public class QueueDefinition implements Serializable, Auditable {
         this.language = language;
         this.queueImgSrc = queueImgSrc;
         this.queueImgTransportIdent = queueImgTransportIdent;
-        this.lastDeployed = lastDeployed;
+        this.lastDeployed = lastDeployed == null ? null : new Date(lastDeployed.getTime());
         this.isAuthenticated = isAuthenticated;
-        this.created = created;
-        this.lastModified = lastModified;
+        this.created = created == null ? null : new Date(created.getTime());
+        this.lastModified = lastModified == null ? null : new Date(lastModified.getTime());
     }
 
     /**
@@ -275,7 +277,8 @@ public class QueueDefinition implements Serializable, Auditable {
      * @param imageSrc The image source to compute the hash for.
      * @return The computed hash of the image source.
      */
-    static String computeImageHash(MessageDigest md, String imageSrc) {
+    @SuppressWarnings("WeakerAccess")
+    public static String computeImageHash(MessageDigest md, String imageSrc) {
         return isNotEmpty(imageSrc) ? printHexBinary(md.digest(serialize(imageSrc))) : null;
     }
 

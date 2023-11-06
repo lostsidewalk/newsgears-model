@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * The Importer interface defines the contract for classes responsible for importing feed data.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "InterfaceNeverImplemented"})
 public interface Importer {
 
     /**
@@ -35,6 +35,7 @@ public interface Importer {
     /**
      * The ImportResponseCallback interface defines methods for handling import responses.
      */
+    @SuppressWarnings({"InnerClassOfInterface", "InterfaceNeverImplemented"})
     interface ImportResponseCallback {
 
         /**
@@ -57,6 +58,7 @@ public interface Importer {
     /**
      * The ImportResult class represents the result of an import operation.
      */
+    @SuppressWarnings("InnerClassOfInterface")
     @Data
     class ImportResult {
 

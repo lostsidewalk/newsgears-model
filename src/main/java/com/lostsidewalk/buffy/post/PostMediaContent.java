@@ -5,6 +5,7 @@ import com.rometools.modules.mediarss.types.MediaContent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import static java.util.Optional.ofNullable;
 /**
  * Represents media content associated with a post's media.
  */
+@Slf4j
 @Data
 @EqualsAndHashCode
 @JsonInclude(NON_EMPTY)
@@ -128,7 +130,6 @@ public class PostMediaContent implements Serializable {
             String type,
             Integer width
     ) {
-        super();
         this.audioChannels = audioChannels;
         this.bitRate = bitRate;
         this.duration = duration;
@@ -190,21 +191,21 @@ public class PostMediaContent implements Serializable {
      *
      * @return A MediaContent instance representing the PostMediaContent object.
      */
-    public MediaContent toModule() {
-        MediaContent mediaContent = new MediaContent(getReference().toUrlModule());
-        mediaContent.setAudioChannels(getAudioChannels());
-        mediaContent.setBitrate(getBitRate());
-        mediaContent.setDuration(getDuration());
-        mediaContent.setExpression(ofNullable(getExpression()).map(PostMediaExpression::toModule).orElse(null));
-        mediaContent.setFileSize(getFileSize());
-        mediaContent.setFramerate(getFrameRate());
-        mediaContent.setHeight(getHeight());
-        mediaContent.setLanguage(getLanguage());
-        mediaContent.setMedium(getMedium());
-        mediaContent.setMetadata(ofNullable(getMetadata()).map(PostMediaMetadata::toModule).orElse(null));
-        mediaContent.setSamplingrate(getSamplingRate());
-        mediaContent.setType(getType());
-        mediaContent.setWidth(getWidth());
+    public final MediaContent toModule() {
+        MediaContent mediaContent = new MediaContent(reference.toUrlModule());
+        mediaContent.setAudioChannels(audioChannels);
+        mediaContent.setBitrate(bitRate);
+        mediaContent.setDuration(duration);
+        mediaContent.setExpression(ofNullable(expression).map(PostMediaExpression::toModule).orElse(null));
+        mediaContent.setFileSize(fileSize);
+        mediaContent.setFramerate(frameRate);
+        mediaContent.setHeight(height);
+        mediaContent.setLanguage(language);
+        mediaContent.setMedium(medium);
+        mediaContent.setMetadata(ofNullable(metadata).map(PostMediaMetadata::toModule).orElse(null));
+        mediaContent.setSamplingrate(samplingRate);
+        mediaContent.setType(type);
+        mediaContent.setWidth(width);
 
         return mediaContent;
     }

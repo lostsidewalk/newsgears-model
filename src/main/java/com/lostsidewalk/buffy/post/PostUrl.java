@@ -3,16 +3,17 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 /**
  * Represents a URL associated with a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 @NoArgsConstructor
@@ -20,7 +21,6 @@ public class PostUrl implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 2314224223343L;
-    private static final String ENTITY_PREFIX = "pu";
     /**
      * A unique identifier for this entity.
      */
@@ -54,7 +54,7 @@ public class PostUrl implements Serializable {
     /**
      * Creates a new PostUrl with the specified properties.
      *
-     * @param ident    A unique identifier for this entity.
+     * @param ident    The unique identifier for this entity.
      * @param title    The title of the URL.
      * @param type     The type of the URL.
      * @param href     The actual URL (href) value.
@@ -73,6 +73,7 @@ public class PostUrl implements Serializable {
     /**
      * Static factory method to create a PostUrl object.
      *
+     * @param ident    The unique identifier of this entity.
      * @param title    The title of the URL.
      * @param type     The type of the URL.
      * @param href     The actual URL (href) value.
@@ -80,9 +81,9 @@ public class PostUrl implements Serializable {
      * @param rel      The relationship of the URL to the current document.
      * @return A new PostUrl instance.
      */
-    public static PostUrl from(String title, String type, String href, String hreflang, String rel) {
+    public static PostUrl from(String ident, String title, String type, String href, String hreflang, String rel) {
         return new PostUrl(
-                ENTITY_PREFIX + "_" + randomAlphanumeric(8),
+                ident,
                 title,
                 type,
                 href,
@@ -101,7 +102,7 @@ public class PostUrl implements Serializable {
      * @param rel      The relationship of the URL to the current document.
      */
     @SuppressWarnings("unused")
-    public void update(String title, String type, String href, String hreflang, String rel) {
+    public final void update(String title, String type, String href, String hreflang, String rel) {
         this.title = title;
         this.type = type;
         this.href = href;

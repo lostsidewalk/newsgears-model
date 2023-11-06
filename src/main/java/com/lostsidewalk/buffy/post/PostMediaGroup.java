@@ -6,9 +6,11 @@ import com.rometools.modules.mediarss.types.MediaGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -18,6 +20,7 @@ import static java.util.Optional.ofNullable;
 /**
  * Represents a media group associated with a post's media.
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(NON_EMPTY)
@@ -49,9 +52,8 @@ public class PostMediaGroup extends BasePostMediaObject implements Serializable 
      * @param postMediaMetadata   Metadata associated with the media group.
      * @param defaultContentIndex Index of the default content within the media group.
      */
-    PostMediaGroup(List<PostMediaContent> postMediaContents, PostMediaMetadata postMediaMetadata, Integer defaultContentIndex) {
-        super();
-        this.postMediaContents = postMediaContents;
+    PostMediaGroup(Collection<? extends PostMediaContent> postMediaContents, PostMediaMetadata postMediaMetadata, Integer defaultContentIndex) {
+        this.postMediaContents = postMediaContents == null ? null : List.copyOf(postMediaContents);
         this.postMediaMetadata = postMediaMetadata;
         this.defaultContentIndex = defaultContentIndex;
     }
@@ -77,15 +79,14 @@ public class PostMediaGroup extends BasePostMediaObject implements Serializable 
      *
      * @return A MediaGroup instance representing the PostMediaGroup data.
      */
-    public MediaGroup toModule() {
+    public final MediaGroup toModule() {
         MediaGroup mg = new MediaGroup(convertArray(
                 this::getPostMediaContents,
                 PostMediaContent::toModule,
                 MediaContent.class
         ));
-        mg.setMetadata(ofNullable(getPostMediaMetadata()).map(PostMediaMetadata::toModule).orElse(null));
-        Integer defaultContentIndex = getDefaultContentIndex();
-        if (defaultContentIndex != null) { // Note: due to a bug in ROME, default content index must be primitive
+        mg.setMetadata(ofNullable(postMediaMetadata).map(PostMediaMetadata::toModule).orElse(null));
+        if (defaultContentIndex != null) {
             mg.setDefaultContentIndex(defaultContentIndex);
         }
 

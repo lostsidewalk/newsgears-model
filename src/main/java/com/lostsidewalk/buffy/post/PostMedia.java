@@ -8,10 +8,12 @@ import com.rometools.modules.mediarss.types.MediaGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -21,6 +23,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Represents media information associated with a post.
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(NON_EMPTY)
@@ -52,11 +55,10 @@ public class PostMedia extends BasePostMediaObject implements Serializable {
      * @param postMediaGroups   List of media groups associated with the post.
      * @param postMediaContents List of media contents associated with the post.
      */
-    PostMedia(PostMediaMetadata postMediaMetadata, List<PostMediaGroup> postMediaGroups, List<PostMediaContent> postMediaContents) {
-        super();
+    PostMedia(PostMediaMetadata postMediaMetadata, Collection<? extends PostMediaGroup> postMediaGroups, Collection<? extends PostMediaContent> postMediaContents) {
         this.postMediaMetadata = postMediaMetadata;
-        this.postMediaGroups = postMediaGroups;
-        this.postMediaContents = postMediaContents;
+        this.postMediaGroups = postMediaGroups == null ? null : List.copyOf(postMediaGroups);
+        this.postMediaContents = postMediaContents == null ? null : List.copyOf(postMediaContents);
     }
 
     /**
@@ -81,10 +83,10 @@ public class PostMedia extends BasePostMediaObject implements Serializable {
      *
      * @return A MediaEntryModule instance representing the PostMedia object.
      */
-    @SuppressWarnings({"unused"})
-    public MediaEntryModule toModule() {
+    @SuppressWarnings("unused")
+    public final MediaEntryModule toModule() {
         MediaEntryModuleImpl mm = new MediaEntryModuleImpl();
-        mm.setMetadata(ofNullable(getPostMediaMetadata()).map(PostMediaMetadata::toModule).orElse(null));
+        mm.setMetadata(ofNullable(postMediaMetadata).map(PostMediaMetadata::toModule).orElse(null));
         mm.setMediaContents(convertArray(this::getPostMediaContents, PostMediaContent::toModule, MediaContent.class));
         mm.setMediaGroups(convertArray(this::getPostMediaGroups, PostMediaGroup::toModule, MediaGroup.class));
 

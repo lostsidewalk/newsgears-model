@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Hash;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a hash associated with a post's media.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaHash implements Serializable {
@@ -55,7 +57,7 @@ public class PostMediaHash implements Serializable {
      *
      * @return A Hash instance representing the PostMediaHash data.
      */
-    public Hash toModule() {
+    public final Hash toModule() {
         return new Hash(algorithm, hashStr);
     }
 }

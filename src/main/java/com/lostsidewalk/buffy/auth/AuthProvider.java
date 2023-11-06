@@ -3,6 +3,8 @@ package com.lostsidewalk.buffy.auth;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.commons.collections4.CollectionUtils.size;
+
 /**
  * Enumeration representing different authentication providers used within the application.
  */
@@ -26,7 +28,7 @@ public enum AuthProvider {
     /**
      * A map to look up AuthProvider enum values by their registration identifiers.
      */
-    static final Map<String, AuthProvider> AUTH_PROVIDERS_BY_REGISTRATION_ID = new HashMap<>();
+    static final Map<String, AuthProvider> AUTH_PROVIDERS_BY_REGISTRATION_ID = new HashMap<>(size(values()));
     static {
         for (AuthProvider a : values()) {
             AUTH_PROVIDERS_BY_REGISTRATION_ID.put(a.registrationId, a);
@@ -51,7 +53,7 @@ public enum AuthProvider {
      * Constructs an AuthProvider without a registration identifier.
      */
     AuthProvider() {
-        this.registrationId = null;
+        registrationId = null;
     }
 
     /**
@@ -62,5 +64,12 @@ public enum AuthProvider {
      */
     public static AuthProvider byRegistrationId(String registrationId) {
         return AUTH_PROVIDERS_BY_REGISTRATION_ID.get(registrationId);
+    }
+
+    @Override
+    public String toString() {
+        return "AuthProvider{" +
+                "registrationId='" + registrationId + '\'' +
+                '}';
     }
 }

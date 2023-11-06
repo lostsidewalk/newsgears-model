@@ -5,6 +5,7 @@ import com.rometools.modules.mediarss.types.Restriction;
 import com.rometools.modules.mediarss.types.Restriction.Relationship;
 import com.rometools.modules.mediarss.types.Restriction.Type;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  * Represents a media restriction associated with a post's media content.
  * This class defines attributes related to the type, relationship, and value of a media restriction.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaRestriction implements Serializable {
@@ -65,7 +67,7 @@ public class PostMediaRestriction implements Serializable {
      *
      * @return A Restriction instance corresponding to the PostMediaRestriction.
      */
-    public Restriction toModule() {
+    public final Restriction toModule() {
         return new Restriction(relationship, type, value);
     }
 }

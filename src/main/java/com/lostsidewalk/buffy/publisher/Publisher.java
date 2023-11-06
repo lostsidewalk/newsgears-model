@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * An interface representing a publisher responsible for publishing posts to various formats and destinations.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "InterfaceNeverImplemented"})
 public interface Publisher {
 
     /**
@@ -48,6 +48,7 @@ public interface Publisher {
      * @return List of feed previews.
      * @throws Exception If an error occurs during the preview generation.
      */
+    @SuppressWarnings("ProhibitedExceptionDeclared")
     List<FeedPreview> doPreview(String username, List<StagingPost> posts, PubFormat format) throws Exception;
 
     /**
@@ -95,13 +96,19 @@ public interface Publisher {
     /**
      * Represents the result of a publication operation, including the publication URL, errors, and publication date.
      */
+    @SuppressWarnings("InnerClassOfInterface")
     @Data
     class PubResult {
 
         /**
          * The publication URL.
          */
-        String url;
+        String transportUrl;
+
+        /**
+         * The user-ident URL.
+         */
+        String userIdentUrl;
 
         /**
          * List of errors encountered during publication.
@@ -113,22 +120,24 @@ public interface Publisher {
          */
         Date pubDate;
 
-        private PubResult(String url, List<Throwable> errors, Date pubDate) {
+        private PubResult(String transportUrl, String userIdentUrl, List<Throwable> errors, Date pubDate) {
             this.errors = errors;
             this.pubDate = pubDate;
-            this.url = url;
+            this.transportUrl = transportUrl;
+            this.userIdentUrl = userIdentUrl;
         }
 
         /**
          * Creates a PubResult instance with the specified URL, errors, and publication date.
          *
-         * @param url     The publication URL.
-         * @param errors  List of errors encountered during publication.
-         * @param pubDate The publication date.
+         * @param transportUrl     The publication transport URL.
+         * @param userIdentUrl     The publication user-ident URL.
+         * @param errors           List of errors encountered during publication.
+         * @param pubDate          The publication date.
          * @return A PubResult instance.
          */
-        public static PubResult from(String url, List<Throwable> errors, Date pubDate) {
-            return new PubResult(url, errors, pubDate);
+        public static PubResult from(String transportUrl, String userIdentUrl, List<Throwable> errors, Date pubDate) {
+            return new PubResult(transportUrl, userIdentUrl, errors, pubDate);
         }
     }
 }

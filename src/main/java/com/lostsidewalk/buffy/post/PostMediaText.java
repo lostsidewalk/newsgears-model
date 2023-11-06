@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Text;
 import com.rometools.modules.mediarss.types.Time;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a text element associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaText implements Serializable {
@@ -70,7 +72,7 @@ public class PostMediaText implements Serializable {
      *
      * @return A Text object.
      */
-    public Text toModule() {
+    public final Text toModule() {
         return new Text(type, value, start, end);
     }
 }

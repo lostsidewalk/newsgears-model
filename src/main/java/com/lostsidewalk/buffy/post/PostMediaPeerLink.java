@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.PeerLink;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a peer link associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaPeerLink implements Serializable {
@@ -56,7 +58,7 @@ public class PostMediaPeerLink implements Serializable {
      *
      * @return A PeerLink object.
      */
-    public PeerLink toModule() {
+    public final PeerLink toModule() {
         PeerLink p = new PeerLink();
         p.setType(type);
         p.setHref(href);

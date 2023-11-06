@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Category;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a media category associated with a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaCategory implements Serializable {
@@ -62,7 +64,7 @@ public class PostMediaCategory implements Serializable {
      *
      * @return A Category instance representing the PostMediaCategory object.
      */
-    public Category toModule() {
+    public final Category toModule() {
         return new Category(scheme, label, value);
     }
 }

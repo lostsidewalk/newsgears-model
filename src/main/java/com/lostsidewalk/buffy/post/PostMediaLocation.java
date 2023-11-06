@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.Location;
 import com.rometools.modules.mediarss.types.Time;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a location associated with media in a post.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaLocation implements Serializable {
@@ -63,12 +65,12 @@ public class PostMediaLocation implements Serializable {
      *
      * @return A Location object.
      */
-    public Location toModule() {
-        Location l = new Location();
-        l.setDescription(description);
-        l.setStart(start);
-        l.setEnd(end);
+    public final Location toModule() {
+        Location location = new Location();
+        location.setDescription(description);
+        location.setStart(start);
+        location.setEnd(end);
 
-        return l;
+        return location;
     }
 }

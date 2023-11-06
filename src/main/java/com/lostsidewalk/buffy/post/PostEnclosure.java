@@ -3,12 +3,12 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 /**
  * Represents an enclosure associated with a post.
@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
  *
  * @since [Include the version or date when this class was introduced]
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 @NoArgsConstructor
@@ -26,7 +27,6 @@ public class PostEnclosure implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 23549873L;
-    private static final String ENTITY_PREFIX = "pe";
     /**
      * A unique identifier for this enclosure entity.
      */
@@ -47,12 +47,13 @@ public class PostEnclosure implements Serializable {
     /**
      * Constructs a new PostEnclosure with the specified URL, type, and length.
      *
+     * @param ident  The unique identifier of this entity.
      * @param url    The URL of the enclosure.
      * @param type   The type of the enclosure.
      * @param length The length of the enclosure in bytes.
      */
-    PostEnclosure(String url, String type, Long length) {
-        this.ident = ENTITY_PREFIX + "_" + randomAlphanumeric(8);
+    PostEnclosure(String ident, String url, String type, Long length) {
+        this.ident = ident;
         this.url = url;
         this.type = type;
         this.length = length;
@@ -61,13 +62,14 @@ public class PostEnclosure implements Serializable {
     /**
      * Static factory method to create a PostEnclosure with a random identifier.
      *
+     * @param ident  The unique identifier of this entity.
      * @param url    The URL of the enclosure.
      * @param type   The type of the enclosure.
      * @param length The length of the enclosure in bytes.
      * @return A PostEnclosure instance with a unique identifier.
      */
-    public static PostEnclosure from(String url, String type, Long length) {
-        return new PostEnclosure(url, type, length);
+    public static PostEnclosure from(String ident, String url, String type, Long length) {
+        return new PostEnclosure(ident, url, type, length);
     }
 
     /**
@@ -78,7 +80,7 @@ public class PostEnclosure implements Serializable {
      * @param length The new length for the enclosure in bytes.
      */
     @SuppressWarnings("unused")
-    public void update(String url, String type, Long length) {
+    public final void update(String url, String type, Long length) {
         this.url = url;
         this.type = type;
         this.length = length;

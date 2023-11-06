@@ -3,6 +3,7 @@ package com.lostsidewalk.buffy.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rometools.modules.mediarss.types.SubTitle;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * Represents a media subtitle associated with a post's media.
  */
+@Slf4j
 @Data
 @JsonInclude(NON_EMPTY)
 public class PostMediaSubTitle implements Serializable {
@@ -60,7 +62,7 @@ public class PostMediaSubTitle implements Serializable {
      *
      * @return A SubTitle instance representing the PostMediaSubTitle data.
      */
-    public SubTitle toModule() {
+    public final SubTitle toModule() {
         SubTitle title = new SubTitle();
         title.setType(type);
         title.setHref(href);
