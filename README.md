@@ -15,8 +15,6 @@
 
 <h3 align="center">NewsGears RSS</h3>
  <p align="center">
-    NewsGears RSS is a platform for creating, reading, and distributing syndicated content over the Web.  It is comprised of both the client and server components that make self-hosted content syndication possible, as well as the underlying code libraries upon which those components are built.
-    <br />
     <a href="https://github.com/lostsidewalk/newsgears-model/issues">Report Bug</a>
     ·
     <a href="https://github.com/lostsidewalk/newsgears-model/issues">Request Feature</a>
@@ -48,11 +46,7 @@
 
 This repository contains the basic Java data structures used throughout the NewsGears RSS platform.
 
-What is RSS?
-
-RSS (RDF Site Summary or Really Simple Syndication) is a web feed that allows users and applications to access updates to websites in a standardized, computer-readable format. Subscribing to RSS feeds can allow a user to keep track of many different websites in a single news aggregator, which constantly monitors sites for new content, removing the need for the user to manually check them.
-
-For more information about RSS and NewsGears, see the parent project repository at: https://www.github.com/lostsidewalk/newsgears-app.
+For more information about NewsGears, and RSS in general, see the parent project repository at: https://www.github.com/lostsidewalk/newsgears-app.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
