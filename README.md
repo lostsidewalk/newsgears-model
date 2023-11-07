@@ -46,8 +46,6 @@
 
 ## What Is This
 
-https://www.feedgears.com
-
 This repository contains the basic Java data structures used throughout the NewsGears RSS platform.
 
 What is RSS?
