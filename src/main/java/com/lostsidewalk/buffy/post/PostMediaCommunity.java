@@ -16,6 +16,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 /**
  * Represents community information associated with a post's media.
@@ -54,7 +55,9 @@ public class PostMediaCommunity implements Serializable {
     PostMediaCommunity(PostMediaStarRating postMediaStarRating, PostMediaStatistics postMediaStatistics, Collection<? extends PostMediaTag> postMediaTags) {
         this.postMediaStarRating = postMediaStarRating;
         this.postMediaStatistics = postMediaStatistics;
-        this.postMediaTags = Set.copyOf(postMediaTags);
+        if (isNotEmpty(postMediaTags)) {
+            this.postMediaTags = Set.copyOf(postMediaTags);
+        }
     }
 
     /**
